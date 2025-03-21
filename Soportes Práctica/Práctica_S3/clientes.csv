@@ -1,0 +1,111 @@
+ ID_cliente , nombre , pais , edad , genero 
+1,James Hayes,Bolivia,33,F
+2,Lucas Morgan,Saint Vincent and the Grenadines,39,F
+3,Jennifer Garcia,Saint Vincent and the Grenadines,51,M
+4,Edward Watson,Luxembourg,18,F
+5,Haley Morris,South Africa,23,F
+6,Carl Foster,Italy,20,M
+7,Donna Lucas,Indonesia,61,F
+8,Kyle Mccoy,Vanuatu,26,M
+9,Marie Diaz,Philippines,55,F
+10,Angela Jones,Namibia,66,F
+11,Thomas Cooper,Lesotho,21,M
+12,Kimberly Sanders,Swaziland,37,M
+13,Kim Jones,Malta,41,F
+14,Jeff Watkins,Reunion,65,M
+15,Eric Clarke,Guadeloupe,59,F
+16,Elizabeth Cochran,Reunion,27,M
+17,William Hayes,Greece,21,M
+18,Robert Brown,Colombia,63,M
+19,Beth Jones,Suriname,53,F
+20,Natasha Atkinson,Palau,51,M
+21,George Graham,Liechtenstein,24,F
+22,Lisa Nichols,Benin,69,M
+23,Nancy Kennedy,Fiji,23,F
+24,Anna Simpson,Bosnia and Herzegovina,59,M
+25,Casey Jones,,19,
+26,,Kazakhstan,19,
+27,Mark Andrade,Sudan,39,F
+28,Sean Petersen,Seychelles,32,M
+29,Shawn Wang,Jersey,57,F
+30,Kelly Long,Israel,24,M
+31,Renee Fletcher,Lebanon,18,M
+32,Kathryn Cobb,Guam,68,M
+33,Michael Wolf,Nauru,43,F
+34,Victor Black,Swaziland,26,M
+35,Kara Henderson,Kuwait,56,F
+36,Jeff Evans,Andorra,64,M
+37,Joseph Reyes,Uganda,26,M
+38,Jennifer Morris,San Marino,20,M
+39,,Bahamas,42,F
+40,Robert Swanson,Tunisia,27,F
+41,Frederick Wall,Armenia,48,M
+42,Joshua Harris,Haiti,36,M
+43,Christopher Mason,Ecuador,29,M
+44,Glenda Cruz,Peru,37,
+45,Phillip Adams,Kiribati,65,F
+46,Austin Berry,Russian Federation,48,F
+47,Danielle Smith,Lebanon,26,M
+48,Jessica Chen,France,57,F
+49,Emily Bailey,American Samoa,62,F
+50,Andrea Rubio,Japan,62,F
+51,Julie Wallace,Antarctica (the territory South of 60 deg S),47,F
+52,Bryan Thomas,San Marino,37,F
+53,Shawn Gill,Argentina,20,F
+54,Patrick Lopez,Faroe Islands,23,M
+55,Daniel Landry,Kazakhstan,21,M
+56,Jennifer Stephens,Kazakhstan,55,M
+57,David Chavez,Sudan,59,M
+58,Elizabeth Pennington,Singapore,43,M
+59,Tracey Brown MD,Lebanon,46,M
+60,Bill Adams,Sri Lanka,24,F
+61,Janet Cox,United States of America,64,F
+62,Derrick House,Honduras,20,M
+63,Grace Potter,Marshall Islands,58,M
+64,John Farrell,Canada,59,F
+65,Brian Molina,Morocco,48,M
+66,Victoria Smith,Mongolia,35,F
+67,Michele Reeves,Belize,34,F
+68,Michael Smith,Guatemala,48,M
+69,David Hayden,Svalbard & Jan Mayen Islands,54,F
+70,Austin Walker,Algeria,44,M
+71,Ronald Wong,Bulgaria,43,M
+72,Rodney Jensen,Mongolia,68,M
+73,Andrea Harris,Mali,19,M
+74,Charles Trujillo,Namibia,42,
+75,Tracy Thomas,Fiji,33,
+76,Keith Smith,Libyan Arab Jamahiriya,57,M
+77,Eric Anderson,Belgium,29,M
+78,John Myers,French Southern Territories,59,F
+79,Richard Patterson,Fiji,28,M
+80,Jeremy Wood,Grenada,30,M
+81,Joshua Perry,Netherlands Antilles,64,M
+82,David Gibson,,36,F
+83,Elizabeth Campbell,Liberia,59,M
+84,Kimberly Massey,Cape Verde,28,F
+85,Tracey Peterson,Northern Mariana Islands,29,F
+86,Thomas Boyd,Tajikistan,25,F
+87,Kristina Bender,Reunion,67,M
+88,Kathy Wagner,San Marino,63,M
+89,Diane Collins,Argentina,39,F
+90,Kenneth Livingston,Saint Vincent and the Grenadines,41,F
+91,Michael Robbins,Sierra Leone,58,M
+92,David Lindsey,,63,M
+93,,Cote d'Ivoire,65,M
+94,Leslie Gonzalez,Nepal,57,
+95,John Brady,Bermuda,52,F
+96,Miranda Gonzales,Qatar,40,M
+97,Juan Nichols,Maldives,28,M
+98,John Baker,Poland,39,F
+99,Daniel Hayes,Bulgaria,51,F
+100,Larry Love,Lesotho,56,M
+84,Kimberly Massey,Cape Verde,28,F
+54,Patrick Lopez,Faroe Islands,23,M
+71,Ronald Wong,Bulgaria,43,M
+46,Austin Berry,Russian Federation,48,F
+45,Phillip Adams,Kiribati,65,F
+40,Robert Swanson,Tunisia,27,F
+23,Nancy Kennedy,Fiji,23,F
+81,Joshua Perry,Netherlands Antilles,64,M
+11,Thomas Cooper,Lesotho,21,M
+1,James Hayes,Bolivia,33,F
