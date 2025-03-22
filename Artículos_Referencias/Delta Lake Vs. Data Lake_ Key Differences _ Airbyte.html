@@ -1,0 +1,828 @@
+<!DOCTYPE html><!-- Last Published: Fri Mar 21 2025 20:57:38 GMT+0000 (Coordinated Universal Time) --><html data-wf-domain="airbyte.com" data-wf-page="65c1ccb7e6de80dce969ce75" data-wf-site="605e01bc25f7e19a82e74788" lang="en" data-wf-locale="en-US" data-wf-collection="65c1ccb7e6de80dce969d0f8" data-wf-item-slug="delta-lake-vs-data-lake"><head><meta charset="utf-8"/><title>Delta Lake Vs. Data Lake: Key Differences | Airbyte</title><meta content="This comprehensive guide will help you understand Data Lake and Delta Lake and their key differences." name="description"/><meta content="Delta Lake Vs. Data Lake: Key Differences | Airbyte" property="og:title"/><meta content="This comprehensive guide will help you understand Data Lake and Delta Lake and their key differences." property="og:description"/><meta content="https://cdn.prod.website-files.com/6064b31ff49a2d31e0493af1/667bb51ca58bf6dd9093059c_data%20lake.png" property="og:image"/><meta content="Delta Lake Vs. Data Lake: Key Differences | Airbyte" property="twitter:title"/><meta content="This comprehensive guide will help you understand Data Lake and Delta Lake and their key differences." property="twitter:description"/><meta content="https://cdn.prod.website-files.com/6064b31ff49a2d31e0493af1/667bb51ca58bf6dd9093059c_data%20lake.png" property="twitter:image"/><meta property="og:type" content="website"/><meta content="summary_large_image" name="twitter:card"/><meta content="width=device-width, initial-scale=1" name="viewport"/><meta content="u0DWV9eErwptpzeTx5hZEib5C08Jt9rhy4HfqE1i5xQ" name="google-site-verification"/><link href="https://cdn.prod.website-files.com/605e01bc25f7e19a82e74788/css/airbyte-dev.55fb5c325.min.css" rel="stylesheet" type="text/css"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link href="https://fonts.gstatic.com" rel="preconnect" crossorigin="anonymous"/><script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js" type="text/javascript"></script><script type="text/javascript">WebFont.load({  google: {    families: ["Inconsolata:400,700","Plus Jakarta Sans:regular,500,600,700"]  }});</script><script type="text/javascript">!function(o,c){var n=c.documentElement,t=" w-mod-";n.className+=t+"js",("ontouchstart"in o||o.DocumentTouch&&c instanceof DocumentTouch)&&(n.className+=t+"touch")}(window,document);</script><link href="https://cdn.prod.website-files.com/605e01bc25f7e19a82e74788/609c1170152b4fa2266486a7_airbyte_favicon.png" rel="shortcut icon" type="image/x-icon"/><link href="https://cdn.prod.website-files.com/605e01bc25f7e19a82e74788/609c1197f45eaeee6160a4d5_airbyte-webclip.png" rel="apple-touch-icon"/><link href="https://airbyte.com/data-engineering-resources/delta-lake-vs-data-lake" rel="canonical"/><!-- Linguana Site Verification -->
+<meta name="linguana-site-verification" content="avNrq9fJwVnmEVOVWRFv"/>
+<meta name="linguana-skip-verification" />
+
+
+<!-- This script goes before Osano intentionally. It implements Google Consent Mode v2  -->
+<!-- https://docs.osano.com/hc/en-us/articles/22469433444372-Google-Consent-Mode-v2 -->
+<script>
+  window.dataLayer = window.dataLayer ||[];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('consent','default',{
+    'ad_storage':'denied',
+    'analytics_storage':'denied',
+    'ad_user_data':'denied',
+    'ad_personalization':'denied',
+    'personalization_storage':'denied',
+    'functionality_storage':'granted',
+    'security_storage':'granted',
+    'wait_for_update': 500
+  });
+  gtag("set", "ads_data_redaction", true);
+</script>
+<!-- Osano - cookie consent manager -->
+<!-- This always need to be first here. Never put any code above this! -->
+<script src="https://cmp.osano.com/16A0CTTE7vE8m1Qif/67beec9b-e563-4736-bdb4-4fe4adc39d48/osano.js"></script>
+<script>
+  window.Osano.cm.addEventListener('osano-cm-initialized', () => {
+    //Show dialog if country is EU or UK
+    const EUcountryCodes = [
+      'at', 'be', 'bg', 'hr', 'cy',
+      'cz', 'dk', 'ee', 'fi', 'fr',
+      'de', 'el', 'hu', 'ie', 'it',
+      'lv', 'lt', 'lu', 'mt', 'nl',
+      'pl', 'pt', 'ro', 'sk', 'si',
+      'es', 'se', 'uk'
+    ]
+    if(EUcountryCodes.includes(window.Osano.cm.countryCode.toLowerCase())){
+        document.querySelector('.osano-cm-dialog').style.display = 'flex'
+    }
+  });
+  window.Osano.cm.addEventListener("osano-cm-script-blocked", (item) => {
+    console.debug(`Script blocked by Osano: ${item}`);
+  });
+  window.Osano.cm.addEventListener("osano-cm-cookie-blocked", (item) => {
+    console.debug(`Cookie blocked by Osano: ${item}`);
+  });
+</script>
+
+<style>
+  /* Osano CSS */
+  .osano-cm-widget { display: none; }
+  // Hide dialog by default, we will display it only if EU/UK
+  .osano-cm-dialog { display: none; }
+  .osano-cm-dialog__close { display: none; }
+  .osano-cm-button--type_denyAll { display: none; }
+  .osano-cm-button--type_manage {
+  	background-color: inherit;
+    border: 1px #1A194D solid;
+    color: #1A194D;
+    font-weight: 200;
+  }
+</style>
+<!-- / End Osano -->
+
+<script>
+    var hsscript = document.createElement("script");
+    hsscript.id = "wphs";
+    hsscript.src = "https://cdn.jsdelivr.net/npm/hockeystack@latest/hockeystack.min.js";
+    hsscript.async = 1;
+    hsscript.dataset.apikey = "2094e2379643f69f7aec647a15f786";
+    hsscript.dataset.cookieless = 1;
+    hsscript.dataset.autoIdentify = 1;
+    document.getElementsByTagName('head')[0].append(hsscript);
+  </script>
+
+<script>
+(function (m,e,s,h,a,i,c) {
+  m[a] = m[a] || function () {
+    (m[a].q = m[a].q || []).push(arguments);
+  };
+  var o = document.createElement(s);
+  o.type = 'text/javascript';
+  o.id = 'mesh-analytics-sdk';
+  o.async = true;
+  o.src = h;
+  o.setAttribute("data-mesh-sdk", i);
+  o.setAttribute("data-mesh-sdk-attributes", JSON.stringify(c));
+  var x = document.getElementsByTagName(s)[0];
+  x.parentNode.insertBefore(o, x);
+})(window,document,'script','https://cdn.jsdelivr.net/npm/@mesh-interactive/mesh-sdk@latest/dist/umd/index.js','mesh','fe95b683734209a92e1d5920e6472209', {useFingerprint: true, track:{session: true, forms: true}});
+</script>
+
+
+<script>
+var Webflow = Webflow || [];
+Webflow.push(function() {  console.log("webflow initialized"); $('html').addClass('webflow-loaded') });
+</script>
+
+<script id="jetboost-script" type="text/javascript"> window.JETBOOST_SITE_ID = "ckr5dw8uk0b4w0tvw3fwn0jhr"; (function(d) { var s = d.createElement("script"); s.src = "https://cdn.jetboost.io/jetboost.js"; s.async = 1; d.getElementsByTagName("head")[0].appendChild(s); })(document); </script>
+<!--  js-cookie v3.0.1 | MIT -->
+<script>
+  !function(e,t){"object"==typeof exports&&"undefined"!=typeof module?module.exports=t():"function"==typeof define&&define.amd?define(t):(e=e||self,function(){var n=e.Cookies,o=e.Cookies=t();o.noConflict=function(){return e.Cookies=n,o}}())}(this,(function(){"use strict";function e(e){for(var t=1;t<arguments.length;t++){var n=arguments[t];for(var o in n)e[o]=n[o]}return e}return function t(n,o){function r(t,r,i){if("undefined"!=typeof document){"number"==typeof(i=e({},o,i)).expires&&(i.expires=new Date(Date.now()+864e5*i.expires)),i.expires&&(i.expires=i.expires.toUTCString()),t=encodeURIComponent(t).replace(/%(2[346B]|5E|60|7C)/g,decodeURIComponent).replace(/[()]/g,escape);var c="";for(var u in i)i[u]&&(c+="; "+u,!0!==i[u]&&(c+="="+i[u].split(";")[0]));return document.cookie=t+"="+n.write(r,t)+c}}return Object.create({set:r,get:function(e){if("undefined"!=typeof document&&(!arguments.length||e)){for(var t=document.cookie?document.cookie.split("; "):[],o={},r=0;r<t.length;r++){var i=t[r].split("="),c=i.slice(1).join("=");try{var u=decodeURIComponent(i[0]);if(o[u]=n.read(c,u),e===u)break}catch(e){}}return e?o[e]:o}},remove:function(t,n){r(t,"",e({},n,{expires:-1}))},withAttributes:function(n){return t(this.converter,e({},this.attributes,n))},withConverter:function(n){return t(e({},this.converter,n),this.attributes)}},{attributes:{value:Object.freeze(o)},converter:{value:Object.freeze(n)}})}({read:function(e){return'"'===e[0]&&(e=e.slice(1,-1)),e.replace(/(%[\dA-F]{2})+/gi,decodeURIComponent)},write:function(e){return encodeURIComponent(e).replace(/%(2[346BF]|3[AC-F]|40|5[BDE]|60|7[BCD])/g,decodeURIComponent)}},{path:"/"})}));
+</script>
+
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-52G528G');</script>
+<!-- End Google Tag Manager -->
+
+
+<!-- prefetch code -->
+<link rel="dns-prefetch" href="https://ajax.googleapis.com/">
+<link rel="dns-prefetch" href="https://assets-global.website-files.com/">
+<link rel="dns-prefetch" href="https://cmp.osano.com/">
+<link rel="dns-prefetch" href="https://fonts.googleapis.com/">
+<link rel="dns-prefetch" href="https://cdn.jsdelivr.net/">
+<link rel="dns-prefetch" href="https://buttons.github.io/">
+<link rel="dns-prefetch" href="https://cdn.jetboost.io/">
+<link rel="dns-prefetch" href="https://fonts.gstatic.com/">
+<link rel="dns-prefetch" href="https://api.withmesh.com">
+<link rel="dns-prefetch" href="https://cdn.jetboost.io/">
+<link rel="preload"href="https://assets.websitefiles.com/605e01bc25f7e19a82e74788/663151596fd8d001cc029206_PlusJakartaSans-VariableFont_wght.ttf" as="font" type="ttf" crossorigin>
+
+
+
+<link rel="preconnect" href="//www.gstatic.com" crossorigin>
+<link rel="preconnect" href="//apis.google.com" crossorigin>
+<link rel="preconnect" href="//www.google-analytics.com" crossorigin>
+<link rel="preconnect" href="//assets-global.website-files.com" crossorigin>
+
+<!--Removing Conditionally Hidden Components -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script><meta name="robots" content="max-image-preview:large">
+<!-- [Attributes by Finsweet] Table of Contents -->
+<script defer src="https://cdn.jsdelivr.net/npm/@finsweet/attributes-toc@1/toc.js"></script>
+
+<!-- [Attributes by Finsweet] Code Highlight -->
+<script async src="https://cdn.jsdelivr.net/npm/@finsweet/attributes-codehighlight@1/codehighlight.js"></script>
+
+<!-- [Attributes by Finsweet] Social Share -->
+<script defer src="https://cdn.jsdelivr.net/npm/@finsweet/attributes-socialshare@1/socialshare.js"></script>
+
+<!-- Start [Attributes by Finsweet] Powerful Rich Text -->
+<script defer src="https://cdn.jsdelivr.net/npm/@finsweet/attributes-richtext@1/richtext.js"></script>
+<!-- End [Attributes by Finsweet] Powerful Rich Text -->
+
+
+<link rel="preload" as="image" href="https://cdn.prod.website-files.com/6064b31ff49a2d31e0493af1/667bb51ca58bf6dd9093059c_data%20lake.png">
+
+<!-- F’in sweet Webflow Hacks -->
+<style>
+.hack20-sub-bullet {
+  margin-left: 15px;
+}
+
+.hack20-sub-bullet-2 {
+  margin-left: 30px;
+}
+
+@media (max-width: 767px) {
+  .hack20-sub-bullet {
+    margin-left: 10px;
+  }
+
+  .hack20-sub-bullet-2 {
+	  margin-left: 20px;
+  }
+}
+</style>
+
+<style> 
+pre code.hljs {
+    display: block;
+    max-width: 100% !important;
+    width: 100% !important;
+    overflow-x: auto;
+    border-radius: .5rem !important;
+    font-size: .875rem !important;
+    padding: .8rem !important;
+}
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://airbyte.com/data-engineering-resources/delta-lake-vs-data-lake"
+     },
+     "headline":"Delta Lake Vs. Data Lake: Key Differences",
+     "description":"This comprehensive guide will help you understand Data Lake and Delta Lake and their key differences.",
+     "image":"https://cdn.prod.website-files.com/6064b31ff49a2d31e0493af1/667bb51ca58bf6dd9093059c_data%20lake.png",
+     "publisher": {
+    "@type": "Organization",
+    "name": "Airbyte",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://cdn.prod.website-files.com/605e01bc25f7e19a82e74788/623d368fd10fec4b528131eb_Logo_light_background.svg"
+    }
+  },
+  "datePublished": "Jun 26, 2024"
+  }
+  </script></head><body><div id="content" class="light-mode text-font-jakarta"><div class="global-styles w-embed"><style>
+
+/* Snippet gets rid of top margin on first element in any rich text*/
+.w-richtext>:first-child {
+	margin-top: 0;
+}
+
+/* Snippet gets rid of bottom margin on last element in any rich text*/
+.w-richtext>:last-child, .w-richtext ol li:last-child, .w-richtext ul li:last-child {
+    margin-bottom: 0;
+}
+
+/* Snippet makes all link elements listed below to inherit color from their parent */
+a, 
+.w-tab-link,
+.w-nav-link,
+.w-dropdown-btn,
+.w-dropdown-toggle,
+.w-dropdown-link
+{
+color: inherit;
+}
+
+/* Snippet prevents all click and hover interaction with an element */
+.clickable-off {
+  pointer-events: none;
+}
+
+/* Snippet enables all click and hover interaction with an element */
+.clickable-on{
+  pointer-events: auto;
+}
+
+/* Snippet enables you to add class of div-square which creates and maintains a 1:1 dimension of a div.*/
+.div-square::after {
+  content: "";
+  display: block;
+  padding-bottom: 100%;
+}
+
+/*Hide focus outline for main content element*/
+    main:focus-visible {
+    outline: -webkit-focus-ring-color auto 0px;
+}
+
+/* Make sure containers never lose their center alignment*/
+.container-medium, .container-small, .container-large {
+  margin-right: auto !important;
+  margin-left: auto !important;
+}
+
+/*Reset selects, buttons, and links styles*/
+.w-input, .w-select, a {
+color: inherit;
+text-decoration: inherit;
+font-size: inherit;
+}
+
+/*Apply "..." after 3 lines of text */
+.text-style-3lines {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+
+/*Apply "..." after 2 lines of text */
+.text-style-2lines {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+</style></div><div class="library_color-modes w-embed"><style>
+#content.light-mode {
+  background-color: #ffffff;
+  color: #1A194D;
+}
+
+#content.dark-mode .navigation_component {
+  background-color: #ffffff;
+}
+
+#content.light-mode .section_library-navigation {
+  background-color: #f8f8fa;
+}
+
+#content.light-mode .library-navigation_link {
+  color: #989dbf;
+}
+
+#content.light-mode .library-navigation_link.w--current {
+  color: #615EFF;
+}
+
+#content.light-mode .library-blog_small-icon {
+  fill: #989DBF;
+}
+
+#content.light-mode .library-button {
+  background-color: #EFF0F5;
+}
+
+#content.light-mode .fs-toc_link {
+  color: #1a194d;
+}
+
+#content.dark-mode {
+  background-color: #0A0A23;
+  color: #ffffff;
+}
+
+/*
+#content.dark-mode a.w--current {
+ color: #707AFF;
+}
+*/
+
+#content.dark-mode .section_library-navigation {
+  background-color: #050512;
+}
+
+#content.dark-mode .library-navigation_search-input {
+  background-color: #1A194D;
+  border: #0A0A23;
+}
+
+#content.dark-mode .library-navigation_link.w--current {
+  color: #615EFF;
+}
+  
+#content.dark-mode .library-blog_small-icon {
+  fill: #989DBF;
+}
+
+#content.dark-mode .library-button {
+  background-color: #1A194D;
+}
+
+#content.dark-mode .fs-toc_link {
+  color: #ffffff;
+}
+
+#content.dark-mode .navigation_component {
+  background-color: #0A0A23;
+}
+
+#content.dark-mode .navigation_dropdown-toggle {
+  color: #ffffff;
+}
+
+#content.dark-mode .navigation_link {
+  color: #ffffff;
+}
+
+#content.dark-mode .html-logo {
+  color: #ffffff;
+}
+
+#content.dark-mode .footer_new {
+  background-color: #0A0A23;
+}
+
+#content.dark-mode .article_grid-tag {
+  background-color: #1A194D;
+  border: #262963;
+}
+
+</style></div><div data-animation="default" class="navigation_component w-nav" data-easing2="ease" fs-scrolldisable-element="smart-nav" data-easing="ease" data-collapse="medium" data-w-id="24b0f4d9-b0f6-9ac5-acc8-8edede812b63" role="banner" data-duration="400"><div class="hide w-embed"><style>
+
+.navigation_dropdown-content {
+  -ms-overflow-style: none; /* for Internet Explorer, Edge */
+  scrollbar-width: none; /* for Firefox */
+  overflow-y: scroll; 
+}
+
+.navigation_dropdown-content::-webkit-scrollbar {
+  display: none; /* for Chrome, Safari, and Opera */
+}
+
+@media screen and (max-width: 991px) {
+  .navigation_dropdown-toggle, .navigation_link {
+	color: #1a194d !important;
+}
+}
+
+@media screen and (max-width: 1150px) and (min-width: 992px) {
+   .github-button {
+     display: none;
+   }
+}
+
+
+
+</style></div><div id="banner" class="navigation_banner"><a href="https://airbyte.com/blog/airbyte-platform-winter-2025-release" class="navigation_banner-text">Winter 2025 Release is now available. Learn more.</a></div><div class="navigation_container"><a href="/" class="logo-wrapper w-nav-brand"><div class="html-logo-left w-embed"><svg width="34" height="35" viewBox="0 0 34 35" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M11.542 4.24644C15.2862 0.0397129 21.4865 -1.19433 26.584 1.23386C33.3566 4.4604 35.8274 12.6796 32.1401 19.0197L23.8451 33.2666C23.3815 34.0627 22.6187 34.6436 21.7242 34.8817C20.8297 35.1197 19.8766 34.9956 19.0742 34.5364L29.1168 17.2847C31.7921 12.6832 30.0027 6.71867 25.0925 4.37026C21.4083 2.6083 16.9045 3.4885 14.1828 6.51869C12.6815 8.18218 11.8386 10.3299 11.8105 12.5635C11.7824 14.7972 12.571 16.9651 14.0299 18.6654C14.2921 18.9705 14.5743 19.2581 14.8746 19.5264L9.01176 29.6158C8.78249 30.0102 8.47724 30.356 8.11342 30.6332C7.74961 30.9105 7.33436 31.1139 6.89139 31.2318C6.44842 31.3497 5.9864 31.3798 5.53171 31.3204C5.07702 31.261 4.63857 31.1133 4.24138 30.8856L10.6061 19.932C9.69184 18.6232 9.03531 17.1543 8.67109 15.603L4.7709 22.3286C4.30728 23.1247 3.54448 23.7056 2.64998 23.9437C1.75548 24.1817 0.802394 24.0576 0 23.5984L10.0859 6.24982C10.5057 5.53738 10.9933 4.86652 11.542 4.24644ZM23.1831 9.76855C25.6121 11.1616 26.451 14.2597 25.0455 16.6708L15.3738 33.2646C14.9102 34.0607 14.1474 34.6415 13.2529 34.8796C12.3584 35.1177 11.4053 34.9935 10.6029 34.5344L19.5834 19.0855C18.8628 18.9349 18.1838 18.6308 17.5931 18.1942C17.0024 17.7575 16.5142 17.1988 16.1622 16.5566C15.8101 15.9143 15.6026 15.2039 15.554 14.4742C15.5054 13.7446 15.6168 13.0132 15.8806 12.3305C16.1444 11.6478 16.5542 11.03 17.0818 10.5199C17.6094 10.0098 18.2422 9.61953 18.9365 9.37596C19.6308 9.13238 20.37 9.04134 21.1032 9.10912C21.8364 9.1769 22.546 9.40188 23.1831 9.76855ZM19.6651 12.8871C19.4989 13.0138 19.3594 13.1718 19.2547 13.352H19.2542C19.0964 13.6235 19.0233 13.9353 19.0439 14.2481C19.0646 14.5608 19.1782 14.8605 19.3704 15.1091C19.5626 15.3577 19.8246 15.5442 20.1235 15.6449C20.4224 15.7457 20.7446 15.7561 21.0495 15.675C21.3544 15.5938 21.6282 15.4248 21.8362 15.1891C22.0443 14.9534 22.1774 14.6618 22.2186 14.3511C22.2598 14.0403 22.2073 13.7244 22.0677 13.4433C21.9281 13.1622 21.7077 12.9285 21.4344 12.7718C21.2529 12.6677 21.0526 12.6002 20.8448 12.573C20.637 12.5459 20.4259 12.5596 20.2235 12.6135C20.0211 12.6674 19.8314 12.7603 19.6651 12.8871Z" fill="#615EFF"/>
+</svg></div><div class="html-logo w-embed"><svg width="89" height="25" viewBox="0 0 89 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M0.179199 18.6001L7.42781 0.143066H11.6778L18.9265 18.6001H14.8747L13.3134 14.4657H5.79223L4.23099 18.6001H0.179199ZM12.0744 11.1435C11.5787 9.69971 11.1368 8.40771 10.7485 7.26748C10.3603 6.12725 9.96379 4.9501 9.55902 3.73603C9.15426 4.9501 8.75362 6.12725 8.35712 7.26748C7.96887 8.40771 7.52694 9.69971 7.0313 11.1435H12.0744ZM20.1531 2.11182C20.1531 1.52119 20.3349 1.04541 20.6983 0.684473C21.0618 0.323535 21.5409 0.143066 22.1357 0.143066C22.7304 0.143066 23.2095 0.323535 23.573 0.684473C23.9365 1.04541 24.1182 1.52119 24.1182 2.11182C24.1182 2.70244 23.9365 3.17822 23.573 3.53916C23.2095 3.9001 22.7304 4.08057 22.1357 4.08057C21.5409 4.08057 21.0618 3.9001 20.6983 3.53916C20.3349 3.17822 20.1531 2.70244 20.1531 2.11182ZM20.3514 18.6001V6.29541H23.9199V18.6001H20.3514ZM26.9433 6.29541V18.6001H30.5118V13.1737C30.5118 11.8776 30.8051 10.881 31.3916 10.1837C31.9781 9.47822 32.7504 9.12549 33.7087 9.12549C34.1713 9.12549 34.6421 9.20342 35.1212 9.35928L35.6168 6.29541C35.0469 6.13135 34.4934 6.04932 33.9565 6.04932C32.3787 6.04932 31.1396 6.71787 30.2392 8.05498V6.29541H26.9433ZM36.9798 18.6001V0.143066H40.5484V7.51357C41.0688 7.0542 41.6636 6.69736 42.3327 6.44307C43.0018 6.18057 43.7246 6.04932 44.501 6.04932C45.6658 6.04932 46.7025 6.32822 47.6111 6.88603C48.5198 7.43564 49.2343 8.19443 49.7547 9.1624C50.2751 10.1222 50.5354 11.2173 50.5354 12.4478C50.5354 13.6782 50.2751 14.7774 49.7547 15.7454C49.2343 16.7052 48.5198 17.464 47.6111 18.0218C46.7025 18.5714 45.6658 18.8462 44.501 18.8462C43.6998 18.8462 42.9522 18.7108 42.2583 18.4401C41.5644 18.1612 40.9573 17.7716 40.4369 17.2712L40.3501 18.6001H36.9798ZM44.0481 15.77C44.9567 15.77 45.7085 15.4542 46.3032 14.8226C46.898 14.1909 47.1954 13.3993 47.1954 12.4478C47.1954 11.4962 46.898 10.7046 46.3032 10.0729C45.7085 9.44131 44.9567 9.12549 44.0481 9.12549C43.1394 9.12549 42.3877 9.44131 41.793 10.0729C41.1982 10.7046 40.9008 11.4962 40.9008 12.4478C40.9008 13.3993 41.1982 14.1909 41.793 14.8226C42.3877 15.4542 43.1394 15.77 44.0481 15.77ZM56.4981 12.3124L53.5986 6.29541H49.869L55.6431 17.9849L52.818 24.7524H56.5724L64.2795 6.29541H60.5127L57.1672 14.3181C57.0846 13.9161 56.9854 13.547 56.8698 13.2106C56.7542 12.8743 56.6302 12.5749 56.4981 12.3124ZM64.7627 6.29541H66.8072V3.21924H70.3758V6.29541H73.3867V9.37158H70.3758V13.8997C70.3758 14.4821 70.5616 14.9415 70.9333 15.2778C71.3133 15.606 71.7924 15.77 72.3707 15.77C72.8002 15.77 73.2422 15.6757 73.6965 15.487V18.3909C72.9117 18.6944 72.1394 18.8462 71.3794 18.8462C69.909 18.8462 68.7773 18.4565 67.9843 17.6772C67.1996 16.8897 66.8072 15.7659 66.8072 14.3058V9.37158H64.7627V6.29541ZM80.1521 15.1671C79.5573 14.7405 79.1484 14.1868 78.9254 13.506H88.5902V12.4354C88.5902 11.1968 88.3094 10.0976 87.7476 9.13779C87.1859 8.17803 86.4177 7.42334 85.443 6.87373C84.4765 6.32412 83.3696 6.04932 82.1222 6.04932C80.8666 6.04932 79.7432 6.32822 78.7519 6.88603C77.7689 7.43564 76.9924 8.19033 76.4225 9.1501C75.8525 10.1017 75.5675 11.1886 75.5675 12.4108C75.5675 13.6495 75.8649 14.7569 76.4596 15.7331C77.0544 16.7011 77.8763 17.464 78.9254 18.0218C79.9745 18.5714 81.1847 18.8462 82.5559 18.8462C83.415 18.8462 84.3113 18.7067 85.2447 18.4278C86.1864 18.1489 87.1364 17.6362 88.0946 16.8897L85.9386 14.3304C85.476 14.7651 84.9597 15.122 84.3897 15.4009C83.828 15.6716 83.1176 15.8069 82.2585 15.8069C81.4573 15.8069 80.7551 15.5937 80.1521 15.1671ZM84.7061 10.9001C84.5088 10.4643 84.2257 10.0942 83.8569 9.78994C83.32 9.34697 82.6757 9.12549 81.924 9.12549C81.164 9.12549 80.5032 9.35107 79.9414 9.80225C79.5648 10.1093 79.2761 10.4753 79.0754 10.9001H84.7061Z" fill="currentColor"/>
+</svg></div></a><a href="/company/press" class="menu-press-wrapper w-inline-block"><div class="menu-press-text">View Press Kit</div><div class="icon-embed-xxsmall w-embed"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--ic" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><path fill="currentColor" d="m12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg></div></a><nav role="navigation" class="navigation_menu w-nav-menu"><div class="navigation_menu-left"><div data-delay="300" data-hover="true" data-w-id="1b4cb9ca-e733-c623-9d52-bb2d6fa5734c" class="navigation_menu-dropdown w-dropdown"><div class="navigation_dropdown-toggle w-dropdown-toggle"><div>Product</div><div class="dropdown-icon w-embed"><svg width=" 100%" height=" 100%" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M2.55806 6.29544C2.46043 6.19781 2.46043 6.03952 2.55806 5.94189L3.44195 5.058C3.53958 4.96037 3.69787 4.96037 3.7955 5.058L8.00001 9.26251L12.2045 5.058C12.3021 4.96037 12.4604 4.96037 12.5581 5.058L13.4419 5.94189C13.5396 6.03952 13.5396 6.19781 13.4419 6.29544L8.17678 11.5606C8.07915 11.6582 7.92086 11.6582 7.82323 11.5606L2.55806 6.29544Z" fill="currentColor"/>
+</svg></div></div><nav class="navigation_dropdown-list w-dropdown-list"><div class="navigation_container"><div class="navigation_dropdown-content"><div class="navigation_dropdown-content-left"><div class="navigation_dropdown-link-list"><h4 class="navigation_dropdown-list-title">Product</h4><a href="/product/airbyte-cloud" class="navigation_dropdown-link w-inline-block"><div class="navigation_icon-wrapper"><img loading="lazy" src="https://cdn.prod.website-files.com/605e01bc25f7e19a82e74788/64ac55d05f425c837b9a49fd_code%201.svg" alt="" class="navigation_icon"/></div><div class="navigation_item-right"><div class="navigation_item-title">Airbyte Cloud</div><p class="navigation_item-description">Fully-managed, get started in minutes</p></div></a><a href="/product/airbyte-enterprise" class="navigation_dropdown-link w-inline-block"><div class="navigation_icon-wrapper"><img loading="lazy" src="https://cdn.prod.website-files.com/605e01bc25f7e19a82e74788/64db8972cabdeee8578a5f6c_rocket.svg" alt="" class="navigation_icon"/></div><div class="navigation_item-right"><div class="navigation_item-title">Airbyte Self-Managed Enterprise</div><p class="navigation_item-description">Secure data movement for your entire org</p></div></a><a href="/product/airbyte-open-source" class="navigation_dropdown-link w-inline-block"><div class="navigation_icon-wrapper"><img loading="lazy" src="https://cdn.prod.website-files.com/605e01bc25f7e19a82e74788/63c97ab6c6af3282e7075bfe_Community.svg" alt="group of people" class="navigation_icon"/></div><div class="navigation_item-right"><div class="navigation_item-title">Airbyte Open Source</div><p class="navigation_item-description">Used by 40k+ companies</p></div></a><a href="/product/powered-by-airbyte" class="navigation_dropdown-link hidden w-inline-block"><div class="navigation_icon-wrapper"><img loading="lazy" src="https://cdn.prod.website-files.com/605e01bc25f7e19a82e74788/64db8972c5ed6e3c50833794_on-prem.svg" alt="" class="navigation_icon"/></div><div class="navigation_item-right"><div class="navigation_item-title">Powered by Airbyte</div><p class="navigation_item-description">Embed 100s integrations at once in your app</p></div></a><a href="/ai" class="navigation_dropdown-link w-inline-block"><div class="navigation_icon-wrapper"><img loading="lazy" src="https://cdn.prod.website-files.com/605e01bc25f7e19a82e74788/63c97ad19cc8cf4a4670f028_Transform.svg" alt="stars sparkling" class="navigation_icon"/></div><div class="navigation_item-right"><div class="navigation_item-title">Airbyte Embedded</div><p class="navigation_item-description">Bring data sources to your AI applications</p></div></a></div><div class="navigation_dropdown-link-list"><h4 class="navigation_dropdown-list-title">capabilities</h4><a href="/product/extract-load" class="navigation_dropdown-link hover-grey w-inline-block"><div class="navigation_icon-wrapper"><img loading="lazy" src="https://cdn.prod.website-files.com/605e01bc25f7e19a82e74788/64db89728d2d1aff70b730b5_badge.svg" alt="" class="navigation_icon"/></div><div class="navigation_item-right"><div class="navigation_item-title">Extract &amp; Load</div><p class="navigation_item-description">Reliable database and API replication at any scale</p></div></a><a href="/product/ai" class="navigation_dropdown-link hover-grey w-inline-block"><div class="navigation_icon-wrapper"><img loading="lazy" src="https://cdn.prod.website-files.com/605e01bc25f7e19a82e74788/64c74ed8e16b1dd01847f80a_magic.svg" alt="" class="navigation_icon"/></div><div class="navigation_item-right"><div class="navigation_item-title">AI / LLM ready data</div><p class="navigation_item-description">Embeddings from unstructured data</p></div></a><a href="/product/connector-development-kit" class="navigation_dropdown-link hover-grey w-inline-block"><div class="navigation_icon-wrapper"><img loading="lazy" src="https://cdn.prod.website-files.com/605e01bc25f7e19a82e74788/64db8972b33df54513fe559c_give.svg" alt="" class="navigation_icon"/></div><div class="navigation_item-right"><div class="navigation_item-title">Connector builder</div><p class="navigation_item-description">Build a new connector  in 10 min</p></div></a><a href="/product/pyairbyte" class="navigation_dropdown-link hover-grey w-inline-block"><div class="navigation_icon-wrapper"><img loading="lazy" src="https://cdn.prod.website-files.com/605e01bc25f7e19a82e74788/63c97ad042030f444d4133f4_Engineering%20analytics.svg" alt="code syntax icon" class="navigation_icon"/></div><div class="navigation_item-right"><div class="navigation_item-title">PyAirbyte</div><p class="navigation_item-description">The power of Airbyte to every Python developer</p></div></a></div></div><div id="w-node-_1b4cb9ca-e733-c623-9d52-bb2d6fa573ca-de812b63" class="navigation_dropdown-content-right"><div class="navigation_dropdown-content-wrapper"><a href="/gated-demo" class="navigation_featured-cta-wrapper w-inline-block"><h4 class="navigation_dropdown-list-title">Try our demo app</h4><img sizes="100vw" srcset="https://cdn.prod.website-files.com/605e01bc25f7e19a82e74788/66e9c3575492f2a771c5846f_product-demo%402x-p-500.webp 500w, https://cdn.prod.website-files.com/605e01bc25f7e19a82e74788/66e9c3575492f2a771c5846f_product-demo%402x-p-800.webp 800w, https://cdn.prod.website-files.com/605e01bc25f7e19a82e74788/66e9c3575492f2a771c5846f_product-demo%402x-p-1080.webp 1080w, https://cdn.prod.website-files.com/605e01bc25f7e19a82e74788/66e9c3575492f2a771c5846f_product-demo%402x-p-1600.webp 1600w, https://cdn.prod.website-files.com/605e01bc25f7e19a82e74788/66e9c3575492f2a771c5846f_product-demo%402x-p-2000.webp 2000w, https://cdn.prod.website-files.com/605e01bc25f7e19a82e74788/66e9c3575492f2a771c5846f_product-demo%402x-p-2600.webp 2600w, https://cdn.prod.website-files.com/605e01bc25f7e19a82e74788/66e9c3575492f2a771c5846f_product-demo%402x-p-3200.webp 3200w, https://cdn.prod.website-files.com/605e01bc25f7e19a82e74788/66e9c3575492f2a771c5846f_product-demo%402x.webp 3810w" alt="" src="https://cdn.prod.website-files.com/605e01bc25f7e19a82e74788/66e9c3575492f2a771c5846f_product-demo%402x.webp" loading="lazy" class="navigation_featured-cta-image"/><div class="button-new"><div>Explore our public demo</div></div></a></div></div></div></div></nav></div><div data-delay="300" data-hover="true" data-w-id="24b0f4d9-b0f6-9ac5-acc8-8edede812c18" class="navigation_menu-dropdown w-dropdown"><div class="navigation_dropdown-toggle w-dropdown-toggle"><div>Solutions</div><div class="dropdown-icon w-embed"><svg width=" 100%" height=" 100%" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M2.55806 6.29544C2.46043 6.19781 2.46043 6.03952 2.55806 5.94189L3.44195 5.058C3.53958 4.96037 3.69787 4.96037 3.7955 5.058L8.00001 9.26251L12.2045 5.058C12.3021 4.96037 12.4604 4.96037 12.5581 5.058L13.4419 5.94189C13.5396 6.03952 13.5396 6.19781 13.4419 6.29544L8.17678 11.5606C8.07915 11.6582 7.92086 11.6582 7.82323 11.5606L2.55806 6.29544Z" fill="currentColor"/>
+</svg></div></div><nav class="navigation_dropdown-list w-dropdown-list"><div class="navigation_container"><div class="navigation_dropdown-content"><div class="navigation_dropdown-content-left"><div class="navigation_dropdown-link-list"><h4 class="navigation_dropdown-list-title">Use Cases</h4><a href="/solutions/artificial-intelligence" class="navigation_dropdown-link w-inline-block"><div class="navigation_icon-wrapper"><img loading="lazy" src="https://cdn.prod.website-files.com/605e01bc25f7e19a82e74788/63c97ad19cc8cf4a4670f028_Transform.svg" alt="stars sparkling" class="navigation_icon"/></div><div class="navigation_item-right"><div class="navigation_item-title">AI &amp; LLMs</div><p class="navigation_item-description">Make sense of unstructured data with LLMs</p></div></a><a href="/solutions/database-replication" class="navigation_dropdown-link w-inline-block"><div class="navigation_icon-wrapper"><img loading="lazy" src="https://cdn.prod.website-files.com/605e01bc25f7e19a82e74788/63c97ab6c6af3282e7075bfe_Community.svg" alt="group of people" class="navigation_icon"/></div><div class="navigation_item-right"><div class="navigation_item-title">Database replication</div><p class="navigation_item-description">High-volume DBs with low latency</p></div></a><a href="/solutions/marketing-analytics" class="navigation_dropdown-link w-inline-block"><div class="navigation_icon-wrapper"><img loading="lazy" src="https://cdn.prod.website-files.com/605e01bc25f7e19a82e74788/64db8972cabdeee8578a5f6c_rocket.svg" alt="" class="navigation_icon"/></div><div class="navigation_item-right"><div class="navigation_item-title">Analytics</div><p class="navigation_item-description">Marketing, sales, product, finance, eng &amp; more</p></div></a><a href="/ai" class="navigation_dropdown-link w-inline-block"><div class="navigation_icon-wrapper"><img loading="lazy" src="https://cdn.prod.website-files.com/605e01bc25f7e19a82e74788/64db8972c5ed6e3c50833794_on-prem.svg" alt="" class="navigation_icon"/></div><div class="navigation_item-right"><div class="navigation_item-title">Embed Connectors</div><p class="navigation_item-description">Easily collect credentials from your end-users</p></div></a></div><div class="navigation_dropdown-link-list"><h4 class="navigation_dropdown-list-title">Resources</h4><a href="/success-stories" class="navigation_dropdown-link hover-grey w-inline-block"><div class="navigation_icon-wrapper"><img loading="lazy" src="https://cdn.prod.website-files.com/605e01bc25f7e19a82e74788/64db8c81cffac451a499b863_Success%20stories.svg" alt="" class="navigation_icon"/></div><div class="navigation_item-right"><div class="navigation_item-title">Success stories</div><p class="navigation_item-description">Learn from other members’ success</p></div></a><a href="/reviews" class="navigation_dropdown-link hover-grey w-inline-block"><div class="navigation_icon-wrapper"><img loading="lazy" src="https://cdn.prod.website-files.com/605e01bc25f7e19a82e74788/64c74ed8e16b1dd01847f80a_magic.svg" alt="" class="navigation_icon"/></div><div class="navigation_item-right"><div class="navigation_item-title">Product reviews</div><p class="navigation_item-description">Used by 1000+ companies</p></div></a><a href="/etl-tools" class="navigation_dropdown-link hover-grey w-inline-block"><div class="navigation_icon-wrapper"><img loading="lazy" src="https://cdn.prod.website-files.com/605e01bc25f7e19a82e74788/63c97ad0c69fcbc54404d45a_Compare%20Airbyte%20products.svg" alt="arrows pointing opposite ways" class="navigation_icon"/></div><div class="navigation_item-right"><div class="navigation_item-title">Compare Airbyte vs. alternatives</div><p class="navigation_item-description">Choose the right solutions for you</p></div></a><a href="https://build-vs-buy.airbyte.com/" target="_blank" class="navigation_dropdown-link hover-grey w-inline-block"><div class="navigation_icon-wrapper"><img loading="lazy" src="https://cdn.prod.website-files.com/605e01bc25f7e19a82e74788/63c97ad13fc78e9a3408e1fc_Finance%20%26%20Ops%20analytics.svg" alt="money icon" class="navigation_icon"/></div><div class="navigation_item-right"><div class="navigation_item-title">Build vs. Buy</div><p class="navigation_item-description">Evaluate your costs in both scenarios</p></div></a><a href="/resource-center" class="navigation_dropdown-link hover-grey w-inline-block"><div class="navigation_icon-wrapper"><img loading="lazy" src="https://cdn.prod.website-files.com/605e01bc25f7e19a82e74788/64db8bc42cc2b45afba53cdf_marketplace.svg" alt="" class="navigation_icon"/></div><div class="navigation_item-right"><div class="navigation_item-title">Resource center</div><p class="navigation_item-description">Our guides to help you in your journey</p></div></a><a href="/company/partners" class="navigation_dropdown-link hover-grey w-inline-block"><div class="navigation_icon-wrapper"><img loading="lazy" src="https://cdn.prod.website-files.com/605e01bc25f7e19a82e74788/64db8972b33df54513fe559c_give.svg" alt="" class="navigation_icon"/></div><div class="navigation_item-right"><div class="navigation_item-title">Partners</div><p class="navigation_item-description">Become a technology or consulting partner</p></div></a></div></div><div id="w-node-_24b0f4d9-b0f6-9ac5-acc8-8edede812c87-de812b63" class="navigation_dropdown-content-right"><div class="navigation_dropdown-content-wrapper"><a href="https://state-of-data.com" class="navigation_featured-cta-wrapper w-inline-block"><h4 class="navigation_dropdown-list-title">THE LARGEST DATA ENGINEERING SURVEY</h4><img sizes="100vw" srcset="https://cdn.prod.website-files.com/605e01bc25f7e19a82e74788/66e9c3b06ae16f121401ee7c_new_state_of_data-p-500.webp 500w, https://cdn.prod.website-files.com/605e01bc25f7e19a82e74788/66e9c3b06ae16f121401ee7c_new_state_of_data-p-800.webp 800w, https://cdn.prod.website-files.com/605e01bc25f7e19a82e74788/66e9c3b06ae16f121401ee7c_new_state_of_data-p-1080.webp 1080w, https://cdn.prod.website-files.com/605e01bc25f7e19a82e74788/66e9c3b06ae16f121401ee7c_new_state_of_data-p-1600.webp 1600w, https://cdn.prod.website-files.com/605e01bc25f7e19a82e74788/66e9c3b06ae16f121401ee7c_new_state_of_data-p-2000.webp 2000w, https://cdn.prod.website-files.com/605e01bc25f7e19a82e74788/66e9c3b06ae16f121401ee7c_new_state_of_data.webp 2540w" alt="" src="https://cdn.prod.website-files.com/605e01bc25f7e19a82e74788/66e9c3b06ae16f121401ee7c_new_state_of_data.webp" loading="lazy" class="navigation_featured-cta-image"/><div class="button-new"><div>Check out State of Data</div></div></a></div></div></div></div></nav></div><div data-delay="300" data-hover="true" data-w-id="24b0f4d9-b0f6-9ac5-acc8-8edede812c97" class="navigation_menu-dropdown w-dropdown"><div class="navigation_dropdown-toggle w-dropdown-toggle"><div>Developers</div><div class="dropdown-icon w-embed"><svg width=" 100%" height=" 100%" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M2.55806 6.29544C2.46043 6.19781 2.46043 6.03952 2.55806 5.94189L3.44195 5.058C3.53958 4.96037 3.69787 4.96037 3.7955 5.058L8.00001 9.26251L12.2045 5.058C12.3021 4.96037 12.4604 4.96037 12.5581 5.058L13.4419 5.94189C13.5396 6.03952 13.5396 6.19781 13.4419 6.29544L8.17678 11.5606C8.07915 11.6582 7.92086 11.6582 7.82323 11.5606L2.55806 6.29544Z" fill="currentColor"/>
+</svg></div></div><nav class="navigation_dropdown-list w-dropdown-list"><div class="navigation_container"><div class="navigation_dropdown-content"><div class="navigation_dropdown-content-left"><div class="navigation_dropdown-link-list"><h4 class="navigation_dropdown-list-title">Learn</h4><a href="https://docs.airbyte.com" target="_blank" class="navigation_dropdown-link w-inline-block"><div class="navigation_icon-wrapper"><img loading="lazy" src="https://cdn.prod.website-files.com/605e01bc25f7e19a82e74788/63c97ae61e909c6019a4e699_Docs.svg" alt="open book " class="navigation_icon"/></div><div class="navigation_item-right"><div class="navigation_item-title">Docs</div><p class="navigation_item-description">How to use and contribute to Airbyte</p></div></a><a href="/blog" class="navigation_dropdown-link w-inline-block"><div class="navigation_icon-wrapper"><img loading="lazy" src="https://cdn.prod.website-files.com/605e01bc25f7e19a82e74788/64db911d752aad1710e3d3b9_Blog.svg" alt="" class="navigation_icon"/></div><div class="navigation_item-right"><div class="navigation_item-title">Blog</div><p class="navigation_item-description">Data engineering thought leadership</p></div></a><a href="/tutorials" class="navigation_dropdown-link w-inline-block"><div class="navigation_icon-wrapper"><img loading="lazy" src="https://cdn.prod.website-files.com/605e01bc25f7e19a82e74788/64db911c477fbd854f5bb01a_Tutorials.svg" alt="" class="navigation_icon"/></div><div class="navigation_item-right"><div class="navigation_item-title">Tutorials</div><p class="navigation_item-description">Improve your data replication game</p></div></a><a href="/tutorials" class="navigation_dropdown-link hidden w-inline-block"><div class="navigation_icon-wrapper"><img loading="lazy" src="https://cdn.prod.website-files.com/605e01bc25f7e19a82e74788/64ac55d05f425c837b9a49fd_code%201.svg" alt="" class="navigation_icon"/></div><div class="navigation_item-right"><div class="navigation_item-title">Quickstarts</div><p class="navigation_item-description">Deploy your use case in minutes</p></div></a><a href="https://airbyte.io/learn?utm_source=globalnav" target="_blank" class="navigation_dropdown-link w-inline-block"><div class="navigation_icon-wrapper"><img loading="lazy" src="https://cdn.prod.website-files.com/605e01bc25f7e19a82e74788/66329f9fef0f209e7c65ef9b_badge.svg" alt="" class="navigation_icon"/></div><div class="navigation_item-right"><div class="navigation_item-title">Airbyte Hands-on course</div><p class="navigation_item-description">Learn the fundamentals of using Airbyte</p></div></a><a href="https://airbyte.com/data-engineering-resources" class="navigation_dropdown-link w-inline-block"><div class="navigation_icon-wrapper"><img loading="lazy" src="https://cdn.prod.website-files.com/605e01bc25f7e19a82e74788/65b31de314f0129672785a5d_Versioning.svg" alt="" class="navigation_icon"/></div><div class="navigation_item-right"><div class="navigation_item-title">Data Engineering Resources</div><p class="navigation_item-description">Index of all our in-depth data eng articles</p></div></a><a href="https://glossary.airbyte.com" target="_blank" class="navigation_dropdown-link w-inline-block"><div class="navigation_icon-wrapper"><img loading="lazy" src="https://cdn.prod.website-files.com/605e01bc25f7e19a82e74788/64db911d752aad1710e3d3b9_Blog.svg" alt="" class="navigation_icon"/></div><div class="navigation_item-right"><div class="navigation_item-title">Data Glossary</div><p class="navigation_item-description">Place for all data knowledge</p></div></a></div><div class="navigation_dropdown-link-list"><h4 class="navigation_dropdown-list-title">Community</h4><a href="https://go.airbyte.com/roadmap" target="_blank" class="navigation_dropdown-link hover-grey w-inline-block"><div class="navigation_icon-wrapper"><img loading="lazy" src="https://cdn.prod.website-files.com/605e01bc25f7e19a82e74788/66329f0c0168166285ef9a55_start.svg" alt="" class="navigation_icon"/></div><div class="navigation_item-right"><div class="navigation_item-title">Public Roadmap</div><p class="navigation_item-description">Get a glimpse in the future</p></div></a><a href="/community/newsletter" class="navigation_dropdown-link hover-grey w-inline-block"><div class="navigation_icon-wrapper"><img loading="lazy" src="https://cdn.prod.website-files.com/605e01bc25f7e19a82e74788/63c97ae8483743429633c259_Newsletter.svg" alt="newsletter icon" class="navigation_icon"/></div><div class="navigation_item-right"><div class="navigation_item-title">Monthly Newsletter</div><p class="navigation_item-description">Stay up to date. 30k+ subscribers</p></div></a><a href="https://support.airbyte.com" target="_blank" class="navigation_dropdown-link hover-grey w-inline-block"><div class="navigation_icon-wrapper"><img loading="lazy" src="https://cdn.prod.website-files.com/605e01bc25f7e19a82e74788/63c97ab7c6af3283b5075c15_Troubleshooting%20support.svg" alt="support icon" class="navigation_icon"/></div><div class="navigation_item-right"><div class="navigation_item-title">Support center</div><p class="navigation_item-description">Access our knowledge base</p></div></a><a href="/community/community" class="navigation_dropdown-link hover-grey w-inline-block"><div class="navigation_icon-wrapper"><img loading="lazy" src="https://cdn.prod.website-files.com/605e01bc25f7e19a82e74788/63c97ad071f792872c4a109f_Airbyte%20Open%20Source.svg" alt="group of people" class="navigation_icon"/></div><div class="navigation_item-right"><div class="navigation_item-title">Community</div><p class="navigation_item-description">Join our 20k+ data  community</p></div></a><a href="/hackathon-airbyte-mindsdb" class="navigation_dropdown-link hover-grey w-inline-block"><div class="navigation_icon-wrapper"><img loading="lazy" src="https://cdn.prod.website-files.com/605e01bc25f7e19a82e74788/63c97ad042030f444d4133f4_Engineering%20analytics.svg" alt="code syntax icon" class="navigation_icon"/></div><div id="w-node-_08183b89-e8e2-9a02-48db-75f4fbf08898-de812b63" class="navigation_item-right"><div class="navigation_item-title">Airbyte + Mindsdb Hackathon</div><p class="navigation_item-description">Compete for $5,000 in prizes. </p></div></a><a href="/community/events" class="navigation_dropdown-link hover-grey w-inline-block"><div class="navigation_icon-wrapper"><img loading="lazy" src="https://cdn.prod.website-files.com/605e01bc25f7e19a82e74788/63c97ae705b22b67fbae06ce_Glossary.svg" alt="papers " class="navigation_icon"/></div><div class="navigation_item-right"><div class="navigation_item-title">Events &amp; community calls</div><p class="navigation_item-description">Live events by the Airbyte team</p></div></a></div></div><div class="navigation_dropdown-content-right"><div class="navigation_dropdown-link-list"><h4 class="navigation_dropdown-list-title">Our Social Platform</h4><a href="https://discuss.airbyte.io/?__hstc=27854691.cb33be5124915e0a0f6574f5f742505e.1688736290796.1692021848607.1692108416910.33&amp;__hssc=27854691.2.1692108416910&amp;__hsfp=3771804001&amp;_gl=1*10vyznh*_ga*ODcyMzI4NjQ2LjE2NzgxMTA1MTc.*_ga_HDBMVFQGBH*MTY5MjEwODQxNS43Ni4xLjE2OTIxMTAyMDkuMC4wLjA.&amp;_ga=2.199980846.1251823804.1692108416-872328646.1678110517" target="_blank" class="navigation_dropdown-link hover-grey w-inline-block"><div class="navigation_icon-wrapper"><img loading="lazy" src="https://cdn.prod.website-files.com/605e01bc25f7e19a82e74788/63c97ab6bfa8c425aad20561_Discourse.svg" alt="discourse icon" class="navigation_icon"/></div><div class="navigation_item-right"><div class="navigation_item-title">Discourse (read-only)</div><p class="navigation_item-description">Community&#x27;s knowledge base</p></div></a><a href="https://github.com/airbytehq/airbyte/discussions" target="_blank" class="navigation_dropdown-link hover-grey w-inline-block"><div class="navigation_icon-wrapper"><img loading="lazy" src="https://cdn.prod.website-files.com/605e01bc25f7e19a82e74788/63c97ab685306b4d9b47778e_Github.svg" alt="github icon" class="navigation_icon"/></div><div class="navigation_item-right"><div class="navigation_item-title">Community forum</div><p class="navigation_item-description">GitHub Discussions for questions, ideas</p></div></a><a href="https://slack.airbyte.com/?_gl=1*1l3llqh*_gcl_au*MTIxMDg1OTg2Ny4xNjg4NzM2Mjk0*_ga*ODcyMzI4NjQ2LjE2NzgxMTA1MTc.*_ga_HDBMVFQGBH*MTY5MjEwODQxNS43Ni4xLjE2OTIxMTAyMDkuMC4wLjA.&amp;_ga=2.259150346.1251823804.1692108416-872328646.1678110517" target="_blank" class="navigation_dropdown-link hover-grey w-inline-block"><div class="navigation_icon-wrapper"><img loading="lazy" src="https://cdn.prod.website-files.com/605e01bc25f7e19a82e74788/63c97ab70889231f2e5143f9_Slack.svg" alt="slack icon" class="navigation_icon"/></div><div class="navigation_item-right"><div class="navigation_item-title">Slack</div><p class="navigation_item-description">20,000+  share tips and get support</p></div></a><a href="https://www.youtube.com/channel/UCQ_JWEFzs1_INqdhIO3kmrw" target="_blank" class="navigation_dropdown-link hover-grey w-inline-block"><div class="navigation_icon-wrapper"><img loading="lazy" src="https://cdn.prod.website-files.com/605e01bc25f7e19a82e74788/64db911d752aad1710e3d3b3_Youtube.svg" alt="" class="navigation_icon"/></div><div class="navigation_item-right"><div class="navigation_item-title">Youtube</div><p class="navigation_item-description">Learn more about Airbyte and data engineering</p></div></a></div></div></div></div></nav></div><a href="/enterprise" class="navigation_link w-nav-link">Enterprise</a><a href="/connectors" class="navigation_link w-nav-link">Connectors</a><a href="/pricing" class="navigation_link w-nav-link">Pricing</a></div><div class="navigation_menu-right"><div class="github-button w-embed"><!-- Place this tag where you want the button to render. -->
+<a class="github-button" href="https://github.com/airbytehq/airbyte" data-size="large" data-show-count="true" aria-label="Star airbytehq/airbyte on GitHub">Star</a></div><a href="/company/talk-to-sales" class="button-new is-alternate no-shrink w-button">Talk to Sales</a><a href="https://cloud.airbyte.com/signup" class="button-new flex-no-grow w-button">Try it  free</a></div></nav><div class="navigation_menu-button w-nav-button"><div class="menu-icon"><div class="menu-icon_line-top"></div><div class="menu-icon_line-middle"><div class="menu-icon_line-middle-inner"></div></div><div class="menu-icon_line-bottom"></div></div></div></div></div><main class="main-wrapper"><section class="section_article"><div class="page-padding"><div class="container-large"><div class="library-section-padding der-top-mobile-padding"><div class="article_grid"><div id="w-node-_93a9133e-1bec-2cb9-1f66-35e13471ae73-e969ce75" class="article_grid-main"><div class="article_grid-top-wrapper"><div class="margin-bottom margin-small"><a href="/data-engineering-resources" class="article_grid-tag w-inline-block"><div>Data Engineering Resources</div></a></div><div class="margin-bottom margin-small"><h1 class="heading-large">Delta Lake Vs. Data Lake: Key Differences</h1></div><div class="library-blog_data-wrapper"><a href="#" class="library-blog_author-link w-inline-block"><img src="" loading="lazy" alt="" class="library-blog_author-pfp w-dyn-bind-empty"/><div class="w-dyn-bind-empty"></div></a><div class="w-condition-invisible">•</div><a href="#" class="library-blog_author-link w-inline-block"><img src="" loading="lazy" alt="" class="library-blog_author-pfp w-dyn-bind-empty"/><div class="w-dyn-bind-empty"></div></a><div>•</div><div>June 26, 2024</div><div>•</div><div class="text-style-italic">20 min read</div></div></div><div class="margin-bottom margin-medium"><div class="article_featured-graphic-wrapper"><a href="#" class="article_featured-image-lightbox w-inline-block w-lightbox"><img src="https://cdn.prod.website-files.com/6064b31ff49a2d31e0493af1/667bb51ca58bf6dd9093059c_data%20lake.png" loading="eager" alt="Delta Lake Vs. Data Lake: Key Differences" sizes="100vw" srcset="https://cdn.prod.website-files.com/6064b31ff49a2d31e0493af1/667bb51ca58bf6dd9093059c_data%20lake-p-500.png 500w, https://cdn.prod.website-files.com/6064b31ff49a2d31e0493af1/667bb51ca58bf6dd9093059c_data%20lake-p-800.png 800w, https://cdn.prod.website-files.com/6064b31ff49a2d31e0493af1/667bb51ca58bf6dd9093059c_data%20lake.png 1080w" class="article_featured-image"/><script type="application/json" class="w-json">{
+  "items": [
+    {
+      "url": "https://cdn.prod.website-files.com/6064b31ff49a2d31e0493af1/667bb51ca58bf6dd9093059c_data%20lake.png",
+      "type": "image"
+    }
+  ],
+  "group": ""
+}</script></a></div></div><div id="blog-content" fs-richtext-element="rich-text" fs-toc-element="contents-3" fs-toc-offsettop="6rem" fs-codehighlight-element="code" fs-codehighlight-theme="base16/harmonic16-dark" class="blog-rich-text w-richtext"><p>Today, ample amounts of data are generated through multiple sources, and organizations use this data to make informed decisions by applying operations and analysis techniques. If the data is managed correctly, you could take advantage of several opportunities. Data Lakes have become essential in the modern data infrastructure, offering a centralized solution for storing extensive volumes and variety of data. Despite its flexibility, managing and processing data in a Data Lake can present significant challenges, like data consistency and governance.</p><p>Delta Lake is a robust solution designed to address the challenges commonly encountered in traditional Data Lakes. It has various functionalities and capabilities that improve data reliability, ACID transactions, scalable metadata handling, schema enforcement, and more.</p><p>This article will delve into the key differences between Delta Lake and Data Lake, focusing on their strengths and use cases.</p><p>Let’s get started!</p><h2>Understanding the Data Lake</h2><figure class="w-richtext-align-center w-richtext-figure-type-image"><div><img src="https://cdn.prod.website-files.com/6064b31ff49a2d31e0493af1/667bb553c9009a342cb691f9_AD_4nXeuuZ4SZGcFNGGVGHoFTJMt_cQdkCQUxRRtDszpKvdlowDAmEB-z_0u2316Og5_19DfBgTktodgko02Dm_yBjDLQvhcKPRZOBpLgFm2QMbiJhJINauhcYsbtLBgo8DsOwKmwgjLoz3zGzCnGR0J5zZEtAI.png" loading="lazy" alt="How does a Data Lake work?"/></div></figure><p>A Data Lake is a centralized storage repository that can hold vast amounts of structured (databases), semi-structured (JSON, XML), and unstructured (text files, images, sensor readings) data. This flexibility allows you to store all your data in its native form, regardless of current use case or analytical needs.</p><h3>Key Attributes of a Data Lake</h3><ul role="list"><li><strong>Scalability: </strong>Data Lakes are efficient storage solutions for handling massive growing datasets. They offer horizontal scalability, which means you can scale your storage capacity by adding more nodes to your Data Lake infrastructure as your data volumes increase.</li><li>‍<strong>Cost-effective: </strong>As Data Lake stores data in its native format, it eliminates the need for instant transformation during ingestion. This reduces the cost associated with data preparation, making it a thrifty storage solution.<strong>‍</strong></li><li><strong>Collaboration and Data Sharing: </strong>Data Lakes promote collaboration and data sharing among teams and departments where authorized users can access various data sets stored within the lake.</li></ul><h3>Challenges Associated with Data Lake</h3><p>While robust, Data Lakes often face challenges that can disrupt their efficiency. Let’s look at some of these challenges: </p><ul role="list"><li>Data Lakes allow data ingestion without strict variation. This lack of schema enforcement can lead to challenges in data organization, retrieval, and analysis.</li><li>Governing vast amounts of data within a Data Lake can be complex. Establishing clear ownership, access control, and data quality standards is crucial to ensure data integrity and usability.</li><li>While Data Lakes can store any type of data, processing it for a specific purpose might require additional tools or frameworks depending on the data format. These processes can consume computational resources and increase data processing time, impacting performance.</li></ul><h2>Understanding Delta Lake</h2><figure class="w-richtext-align-center w-richtext-figure-type-image"><div><img src="https://cdn.prod.website-files.com/6064b31ff49a2d31e0493af1/667bb5538dc72c14c9089bec_AD_4nXdZK1Mu9ZO_4XHH_ANt1irZKMi1pcRx26z2rK44VxT1A8OX0876YkI4qwwVVTo0XLfzynZ1n-qefb6VLlwo5kD0J1Vs1j3_yEemj2_LwzHt4FnZBecwUmV4WDiq1wRaB34QEEd8LzKuiaW1HcK8loFA-FKM.png" loading="lazy" alt="How does a Delta Lake work?"/></div></figure><p>Delta Lake is a modern storage and management layer built over a Data Lake. It enhances data management and analytical capabilities by offering a reliable single source of truth for all your data workloads. Delta Lake can handle petabytes of data and protect sensitive data with its robust isolation and serialization, making it a good choice among modern data management solutions.</p><h3>Key Attributes of a Delta Lake</h3><ul role="list"><li><strong>Time Travel: </strong>The transaction log in Delta Lake contains a master record that holds all the changes made to the data. You can access or roll back to the data set at a particular time according to your need, which enables you to perform historical analysis, audit, or troubleshooting.</li><li>‍<strong>Data Manipulation Language: </strong>The Delta Lake architecture supports data manipulation language operations, which include commands like updates, mergers, and delete. These commands simplify the common data management tasks like data governance and maintain efficient workflows.<strong>‍</strong></li><li><strong>Schema Enforcement: </strong>Delta Lake enforces data schema by validating data types. This helps maintain data consistency and reliability while performing various data-related business operations.</li></ul><div class="w-embed"><div style="background-image: linear-gradient(135deg, #1a194d, #0c0b25) !important; padding:30px;border-radius:5px;">
+<h4 style="color:#fff;margin-top:0 !important">Sync Delta Lake & Data Lakes data <em style="color:#FF6A4D">Airbyte’s powerful connectors</em></h4><em style="color:#FF6A4D">
+<a href="https://airbyte.com/company/talk-to-sales" style="display:inline-block;margin-top:10px !important;padding:10px 20px;border-radius: 2rem;font-weight: 600;text-decoration: none;color: #fff !important;background: #433bfb !important;font-size:14px;">Talk to our team→</a>
+</em></div></div><h2>Delta Lake Vs. Data Lake: Key Differences</h2><blockquote>The main difference between Delta Lake and a Data Lake is that Delta Lake adds ACID transactions, schema enforcement, and versioning to a Data Lake, making it more reliable and structured for analytics, while a traditional Data Lake stores raw, unstructured data at scale.</blockquote><p>Choosing between Delta Lake and Data Lake depends on your specific data management needs. Here’s a detailed comparison to help you decide:</p><div class="w-embed"><!DOCTYPE html>
+<html>
+<head>
+  <style>
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      border: 1px solid black;
+      padding: 8px;
+      text-align: center;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+  </style>
+</head>
+<body>
+
+<table>
+    <thead>
+        <tr>
+            <th><b>Feature</b><br></th>
+            <th>
+                <p><b>Delta Lake</b><br></p>
+            </th>
+            <th><b>Data Lake</b><br></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                <p><b>Architecture</b></p>
+            </td>
+            <td>Delta Lake architecture consists of three major components—delta tables, delta logs, and storage layer.</td>
+            <td>The Data Lake architecture consists of multiple layers—ingestion, distillation, processing, and insights.</td>
+        </tr>
+        <tr>
+            <td><b>Schema Validation</b></td>
+            <td>
+                <p>It enforces schema validation during data ingestion, ensuring data adheres to the defined structure.</p>
+            </td>
+            <td>
+                <p>It supports the schema-on-read approach, where schema validation occurs while accessing the data. This allows data to be stored in its raw format.</p>
+            </td>
+        </tr>
+        <tr>
+            <td><b>Performance Optimization</b><br></td>
+            <td>
+                <p>Delta Lake enhances query performance by leveraging the distributed computing framework like Apache Spark for parallel processing.</p>
+            </td>
+            <td>
+                <p>Data Lake may require additional tools and frameworks for efficient data querying.</p>
+            </td>
+        </tr>
+        <tr>
+            <td><b>Data Formatting</b><br></td>
+            <td>In Delta Lake, the data is formatted and organized into file formats like Parquet, enabling efficient storage.</td>
+            <td>
+                <p>Data Lake can store data in original format, without specifying any formatting.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p><b>File Listing</b></p>
+            </td>
+            <td>
+                <p>Delta Lake maintains transaction logs that provide a unified view of all the data files and their versions.</p>
+            </td>
+            <td>You have to navigate through folders and directories to locate files. </td>
+        </tr>
+    </tbody>
+</table>
+
+</body>
+</html></div><p>Let’s delve deeper into the differences for a better understanding:</p><h3>Architecture</h3><p>Delta Lake utilizes a three-part architecture designed for efficient data management and large-scale data processing:</p><ul role="list"><li><strong>Delta Table:</strong> Data in the delta table is stored in a columnar format. This helps to improve query performance and data compression for large datasets.<strong>‍</strong></li><li><strong>Delta Log: </strong>Any changes or modifications made in the delta table are captured and maintained inside a delta log. The delta log also provides features like versioning and rollback.<strong>‍</strong></li><li><strong>Storage Layer: </strong>This layer is where all the actual data files are stored in an object storage such as an S3 bucket or Azure Data Lake storage.</li></ul><p>In contrast, Data Lake architecture has the following layers:</p><ul role="list"><li><strong>Ingestion Layer: </strong>This layer is the entry point for a Data Lake and is responsible for collecting and importing data from multiple sources.<strong>‍</strong></li><li><strong>Distillation Layer: </strong>The distillation layer interprets the incoming raw data and transforms it into structured data. The steps involved in data transformation include data cleaning, normalization, aggregation, and enrichment.</li><li>‍<strong>Processing Layer: </strong>This layer allows you to execute queries on your data. It acts as a computational engine that enables you to handle data for different analytics requirements.<strong>‍</strong></li><li><strong>Insight Layer: </strong>Provides tools for querying and filtering to generate reports and gain insights, which helps you better understand data and make informed decisions.</li></ul><h3>Schema Validation</h3><p>Data Lakes offers more flexibility as data can be ingested without pre-defining the schema or any specification. This allows for quick data ingestion of diverse data types. However, if not managed effectively, this flexibility can lead to quality issues at times.</p><p>On the other hand, Delta Lake enforces schema validation during data ingestion. This means that any data entering into the delta table must adhere to the specified schema for that table. If there are any discrepancies, such as missing columns or incorrect data type, Delta Lake prevents the data from being stored in the delta table and ensures data integrity. </p><h3>ACID Transactions</h3><p>Storage flexibility in Data Lake can come at the cost of data consistency. Traditional Data Lakes often lack built-in mechanisms to ensure data integrity during updates or writes. This can lead to issues like inconsistent and corrupted data.</p><p>Delta Lake addresses these challenges by supporting ACID (Atomicity, Consistency, Isolation, Durability) transactions. ACID transactions guarantee that the data updates are completed successfully or rolled back entirely, even when multiple users modify data concurrently. This ensures data consistency and integrity within Delta Lake, fostering trust in the data used for analytics.</p><h3>Performance Optimization</h3><p>Delta Lake leverages Apache Spark&#x27;s distributed computing framework. Spark allows parallel data processing across a cluster of machines, significantly accelerating data processing tasks.</p><p>Contrarily, with Data Lakes, you may also achieve performance optimization, but the approach might differ. You can leverage additional tools, such as Apache Hive or Presto, to optimize large-scale data querying or techniques like data partitioning.</p><h3><strong>Versioning and Time Travel</strong></h3><p>Data Lakes don&#x27;t include native versioning - you&#x27;ll need manual versioning through folder structures or file naming. Rolling back changes means keeping duplicate copies of data, which increases storage costs and complicates data management. Tracking changes requires external version control or metadata management systems.</p><p>Delta Lake maintains a transaction log that records all changes, enabling access to any previous version using time travel queries. You can query data as it existed at any point, roll back changes, audit modifications, and reproduce historical analyses without storing full copies of the data.</p><h2><strong>When to Choose Between Data Lakes Vs. Delta Lake</strong></h2><h3><strong>Stick with Data Lakes When</strong></h3><ul role="list"><li>Processing one-time or periodic batch data</li><li>No concurrent write operations are needed</li><li>Basic ETL pipelines without complex transformations</li><li>Limited infrastructure budget</li><li>Temporary data storage needs</li></ul><h3><strong>Delta Lake Adds Value When</strong></h3><ul role="list"><li>Complex data operations are needed</li><li>Real-time data processing needed</li><li>Multiple teams accessing the same data</li><li>Performance is a priority</li></ul><h2><strong>How to Migrate From Data Lake to Delta Lake</strong></h2><h3><strong>1. Start by analyzing your existing Data Lake</strong></h3><p>Check data volumes, query patterns, and identify critical tables. Map out dependencies between datasets and downstream applications. Create a migration priority list based on business impact and complexity.</p><h3><strong>2. Begin with smaller, less critical tables as test cases</strong></h3><p>Convert Parquet or other formats to Delta format using Spark commands. Set up parallel processing to maintain business operations during migration.</p><h3><strong>3. Compare record counts between old and new systems</strong></h3><p>Run key business queries on both systems to verify that the results match. Check performance metrics and optimize Delta tables if needed. Keep the original Data Lake as a fallback until validation is completed.</p><h2>Using Airbyte to Bring Data into Central Repositories</h2><p>Managing data coming from disparate sources can be complex due to multiple data formats, movement processes, and transformation needs. <a href="https://airbyte.com/" target="_blank">Airbyte</a>, a versatile data integration platform, simplifies this process by enabling you to easily connect diverse data sources to your preferred destination system, including cloud object solutions like Azure Blob Storage and Amazon S3.</p><figure style="max-width:900pxpx" class="w-richtext-align-fullwidth w-richtext-figure-type-image"><div><img src="https://cdn.prod.website-files.com/6064b31ff49a2d31e0493af1/66619a79a200922d32e73216_AD_4nXc8LkMY4c5Wr2HEO87PtzCXUEzvbLfHnevnsa0E70TsuHaRL0B7FxW562F8gfG5wgoy21dgUXU5rGrkXXuSx7tF7bReOSMIG9sL-YEuXT_EIojLqFhyf8YUUTkwUM4AJ9pRJMnPsPCzC8wDiaIvOaU5Jjo4.png" loading="lazy" alt="Airbyte"/></div></figure><p>Airbyte offers an intuitive user interface and automated data pipelines, allowing you to scale data integration seamlessly. It offers over <a href="https://airbyte.com/connectors" target="_blank">350 pre-built connectors</a> for various data sources and destinations, accelerating your data integration workflows in Delta Lake or Data Lake environments.</p><p>Here’s more about Airbyte!</p><ul role="list"><li>For situations requiring unique data sources, Airbyte’s <a href="https://docs.airbyte.com/connector-development/cdk-python/" target="_blank">Connector Development Kit</a> (CDK) empowers you to build custom connectors, fostering flexible and seamless connectivity to any data source.</li><li>Airbyte promotes data consistency by facilitating synchronization between different data environments. With its <a href="https://airbyte.com/tutorials/incremental-change-data-capture-cdc-replication" target="_blank">CDC</a> techniques, you can replicate source changes into your destination systems.</li><li>Airbyte supports integration with dbt, a popular transformation tool, allowing you to streamline data transformation tasks using dbt models.</li><li>Security remains a priority as Airbyte connectors adhere to security protocols such as SSH, HTTPS, and SSL during data integration.</li></ul><h2>Conclusion</h2><p>Both Delta Lake and Data Lake offer distinctive advantages. Data Lake provides flexibility and storage for diverse data types, regardless of their size. This is ideal if you need to house a wide range of data for potential future use cases.</p><p>At the same time, Delta Lake offers transactional and schema enforcement capabilities. This is optimal choice if you require trust in the accuracy of data used for analytics. To determine which data management solution to rely on, you should evaluate your organization’s needs, processing, and scalability requirements. </p><h2>FAQs </h2><h3>Q. What is a Data Lake in simple terms?</h3><p>A Data Lake is a centralized storage repository that can hold vast amounts of structured, semi-structured, and unstructured data in its native form.</p><h3>Q. What problems does Delta Lake solve? </h3><p>Delta Lake helps you resolve some issues associated with Data Lake, including data quality, consistency, and transactionality.</p><h3>Q. What is the difference between a Data Lake and a data mart?</h3><p>Data mart is a subject-oriented data store specifically designed to meet analytical needs of a particular department, such as finance, marketing, sales, and more. In contrast, a Data Lake is a centralized storage repository for all your organization&#x27;s raw data, regardless of format or structure.</p><h3>Q. Can you store unstructured data in Delta Lake? </h3><p>Yes, you can store unstructured data, such as images, audio, etc. in a Delta lake and decode it when required.</p></div><div class="article_cta-wrapper w-condition-invisible"><div class="article_cta-component"><div class="article_cta-title">Limitless data movement with free Alpha and Beta connectors</div><div class="article_cta-button"><div>Introducing: our Free Connector Program</div></div></div><div class="article_cta-component w-condition-invisible"><div class="w-dyn-bind-empty"></div><a href="#" class="article_cta-button w-inline-block"><div class="text-style-link w-dyn-bind-empty"></div></a></div></div><div id="blog-content" fs-richtext-element="rich-text" fs-toc-element="contents-4" fs-toc-offsettop="6rem" fs-codehighlight-element="code" fs-codehighlight-theme="base16/harmonic16-dark" class="blog-rich-text w-condition-invisible w-dyn-bind-empty w-richtext"></div><div class="margin-top margin-medium"><div class="article_cta-component"><div class="article_cta-title">The data movement infrastructure for the modern data teams.</div><a href="https://cloud.airbyte.com/signup" class="article_cta-button w-inline-block"><div>Try a 14-day free trial</div></a></div></div><div class="library_author-component w-condition-invisible"><img src="" loading="lazy" alt="" class="library_author-pfp w-dyn-bind-empty"/><div class="blog-post_author-content-wrapper"><div class="margin-bottom margin-small"><h3 class="library_author-title">About the Author</h3></div><div class="library_author-bio w-dyn-bind-empty w-richtext"></div><div class="blog-author_social-wrapper"><a href="#" class="w-inline-block"><div class="blog-author-social-img w-embed"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--bx" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><path d="M20 3H4a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1zM8.339 18.337H5.667v-8.59h2.672v8.59zM7.003 8.574a1.548 1.548 0 1 1 0-3.096a1.548 1.548 0 0 1 0 3.096zm11.335 9.763h-2.669V14.16c0-.996-.018-2.277-1.388-2.277c-1.39 0-1.601 1.086-1.601 2.207v4.248h-2.667v-8.59h2.56v1.174h.037c.355-.675 1.227-1.387 2.524-1.387c2.704 0 3.203 1.778 3.203 4.092v4.71z" fill="currentColor"/></svg></div></a><a href="#" class="w-inline-block"><div class="blog-author-social-img w-embed"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--simple-icons" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><path fill="currentColor" d="M23.953 4.57a10 10 0 0 1-2.825.775a4.958 4.958 0 0 0 2.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 0 0-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 0 0-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 0 1-2.228-.616v.06a4.923 4.923 0 0 0 3.946 4.827a4.996 4.996 0 0 1-2.212.085a4.936 4.936 0 0 0 4.604 3.417a9.867 9.867 0 0 1-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 0 0 7.557 2.209c9.053 0 13.998-7.496 13.998-13.985c0-.21 0-.42-.015-.63A9.935 9.935 0 0 0 24 4.59z"/></svg></div></a></div></div></div><div class="library_author-component w-condition-invisible"><img src="" loading="lazy" alt="" class="library_author-pfp w-dyn-bind-empty"/><div class="blog-post_author-content-wrapper"><div class="margin-bottom margin-small"><h3 class="library_author-title">About the Author</h3></div><div class="library_author-bio w-dyn-bind-empty w-richtext"></div><div class="blog-author_social-wrapper"><a href="#" class="w-inline-block"><div class="blog-author-social-img w-embed"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--bx" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><path d="M20 3H4a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1zM8.339 18.337H5.667v-8.59h2.672v8.59zM7.003 8.574a1.548 1.548 0 1 1 0-3.096a1.548 1.548 0 0 1 0 3.096zm11.335 9.763h-2.669V14.16c0-.996-.018-2.277-1.388-2.277c-1.39 0-1.601 1.086-1.601 2.207v4.248h-2.667v-8.59h2.56v1.174h.037c.355-.675 1.227-1.387 2.524-1.387c2.704 0 3.203 1.778 3.203 4.092v4.71z" fill="currentColor"/></svg></div></a><a href="#" class="w-inline-block"><div class="blog-author-social-img w-embed"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--simple-icons" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><path fill="currentColor" d="M23.953 4.57a10 10 0 0 1-2.825.775a4.958 4.958 0 0 0 2.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 0 0-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 0 0-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 0 1-2.228-.616v.06a4.923 4.923 0 0 0 3.946 4.827a4.996 4.996 0 0 1-2.212.085a4.936 4.936 0 0 0 4.604 3.417a9.867 9.867 0 0 1-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 0 0 7.557 2.209c9.053 0 13.998-7.496 13.998-13.985c0-.21 0-.42-.015-.63A9.935 9.935 0 0 0 24 4.59z"/></svg></div></a></div></div></div></div><div id="w-node-_93a9133e-1bec-2cb9-1f66-35e13471af13-e969ce75" class="article_sidebar-wrapper"><div class="article_sidebar-component"><div id="toc" class="article_sidebar-item"><h2 class="article_sidebar-title">Table of contents</h2><div class="fs-toc_link-content"><div class="fs-toc_link-wrapper is-h2"><a href="#" class="fs-toc_link w-inline-block"><div fs-toc-element="link-3">Example H2</div></a><div fs-toc-element="ix-trigger" id="w-node-_93a9133e-1bec-2cb9-1f66-35e13471af1d-e969ce75" class="fs-toc_h-trigger"></div><div class="fs-toc_link-wrapper is-h3"><a href="#" class="fs-toc_link is-h3 w-inline-block"><div fs-toc-element="link">Example H3</div></a><div class="fs-toc_link-wrapper is-h4"><a href="#" class="fs-toc_link is-h4 w-inline-block"><div fs-toc-element="link">Example H4</div></a><div class="fs-toc_link-wrapper is-h5"><a href="#" class="fs-toc_link is-h5 w-inline-block"><div fs-toc-element="link">Example H5</div></a><div class="fs-toc_link-wrapper is-h6"><a href="#" class="fs-toc_link is-h6 w-inline-block"><div fs-toc-element="link">Example H6</div></a></div></div></div></div></div></div><div class="fs-toc_link-content w-condition-invisible"><div class="fs-toc_link-wrapper is-h2"><a href="#" class="fs-toc_link w-inline-block"><div fs-toc-element="link-4">Example H2</div></a><div fs-toc-element="ix-trigger" id="w-node-_93a9133e-1bec-2cb9-1f66-35e13471af33-e969ce75" class="fs-toc_h-trigger"></div><div class="fs-toc_link-wrapper is-h3"><a href="#" class="fs-toc_link is-h3 w-inline-block"><div fs-toc-element="link">Example H3</div></a><div class="fs-toc_link-wrapper is-h4"><a href="#" class="fs-toc_link is-h4 w-inline-block"><div fs-toc-element="link">Example H4</div></a><div class="fs-toc_link-wrapper is-h5"><a href="#" class="fs-toc_link is-h5 w-inline-block"><div fs-toc-element="link">Example H5</div></a><div class="fs-toc_link-wrapper is-h6"><a href="#" class="fs-toc_link is-h6 w-inline-block"><div fs-toc-element="link">Example H6</div></a></div></div></div></div></div></div></div><div class="article_sidebar-item"><div class="article_sidebar-cta hidden"><h2 class="article_sidebar-title text-align-center">Get your data syncing in minutes</h2><a href="https://cloud.airbyte.com/signup" target="_blank" class="button-new w-inline-block"><div class="text-size-regular">Try Airbyte free</div></a></div><div class="article_sidebar-cta is-hidden"><h2 class="article_sidebar-title text-align-center">Join our newsletter to get all the insights on the data stack.</h2><div class="w-embed"><style>
+
+.hbspt-form {margin-bottom: 0px !important;}
+
+/* general form styles */
+.hbspt-form, form{
+	display: flex !important;
+  flex-direction: column !important;
+  gap: 1rem !important;
+  justify-content: center !important;
+  width: 100% !important;
+  height: 100% !important;
+  z-index: 1 !important;
+}
+
+/* input, textarea, select styles */
+.hbspt-form input, textarea, select{
+  min-height: 3rem !important;
+  width: 100% !important;
+  padding: 0rem 1rem !important;
+  border: 1px solid #CBC8FF !important;
+  border-radius: 25px !important;
+  background-color: #f8f8fa !important;
+  color: #1a194d !important;
+  font-size: .9rem !important;
+  line-height: 1.1 !important;
+  font-weight: 400 !important;
+  text-align: center !important;
+  background: #fff !important;
+}
+
+/* button styles */
+.hbspt-form input[type=submit] {
+	padding: 1rem !important;
+  min-width: 10rem !important;
+  max-width: 16rem !important;
+  background: #1A194D !important;
+  border-radius: 25px !important;
+  font-weight: 600 !important;
+  font-size: 1rem !important;
+  color: #fff !important;
+  margin: 0 auto !important;
+  display: block !important;
+	text-align: center !important;
+	-webkit-appearance: none !important;
+  cursor: pointer;
+  border: none !important;
+}
+
+/* button styles on hover*/
+.hbspt-form input[type=submit]:hover {
+	box-shadow: inset 0 -1px 1px 100px rgb(0 0 0 / 15%), 0 8px 5px -5px rgb(0 0 0 / 20%);
+}
+
+/* label styles */
+.hbspt-form label {
+	display: none !important;
+	margin-bottom: 0.5rem;
+  color: #1a194d;
+  font-size: 1rem;
+  line-height: 1.1;
+  font-weight: 500;
+}
+
+.hbspt-form ul {
+	display: none !important;
+}
+
+.hs-richtext {
+	font-size:13px;
+  font-weight: 400;
+}
+
+@media screen and (max-width: 767px) {
+	.hbspt-form, form{
+	display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 1rem !important;
+  justify-content: center !important;
+	}
+  
+  .hbspt-form input{
+  min-height: 3rem !important;
+  min-width: 14rem !important;
+  max-width: 18rem !important;
+	}
+  
+  .hbspt-form input[type=submit] {
+  min-width: 14rem !important;
+  max-width: 18rem !important;
+	}
+  
+  .hbspt-form select{
+		-webkit-appearance: none !important;
+	}
+}
+
+</style></div><div class="w-embed w-script"><script charset="utf-8" type="text/javascript" src="//js.hsforms.net/forms/v2.js?pre=1"></script>
+<script>
+  hbspt.forms.create({
+    region: "na1",
+    portalId: "21615363",
+    formId: "54037db4-5e2e-46fe-910f-f64a97a5dd5a"
+  });
+</script></div></div><div class="article_sidebar-cta2 w-condition-invisible"><div class="text-align-center w-embed"><h2 class="article_sidebar-title"> Integrate  with 300+ apps using Airbyte </h2></div><a href="https://cloud.airbyte.com/signup" class="button-new is-dark-blue no-grow w-inline-block"><div>Try Airbyte for free</div></a></div><div class="article_sidebar-cta2"><div class="text-align-center w-embed"><h2 class="article_sidebar-title"> Integrate and move data across 300+ apps using Airbyte.</h2></div><a href="https://cloud.airbyte.com/signup" class="button-new is-dark-blue no-grow w-inline-block"><div>Sign up for free trial</div></a></div></div><div class="article_sidebar-item"><h2 class="article_sidebar-title">Related posts</h2><div class="library-blog_list-wrapper w-dyn-list"><div role="list" class="library-blog_list w-dyn-items"><div role="listitem" class="library-blog_item w-dyn-item"><div class="library-blog_card"><a href="/data-engineering-resources/etl-data-mapping" class="library-blog_card-link w-inline-block"><div class="library-blog_small-title is-smaller">Data Mapping in ETL: What it is &amp; How it Works?</div></a><div class="library-blog_data-wrapper"><a href="#" class="library-blog_author-link w-inline-block"><div class="w-dyn-bind-empty"></div></a><div>•</div><div>March 18, 2025</div><div>•</div><div class="text-style-italic">20 min read</div></div></div></div><div role="listitem" class="library-blog_item w-dyn-item"><div class="library-blog_card"><a href="/data-engineering-resources/mysql-sync" class="library-blog_card-link w-inline-block"><div class="library-blog_small-title is-smaller">How to Sync Two MySQL Databases Using Airbyte?</div></a><div class="library-blog_data-wrapper"><a href="#" class="library-blog_author-link w-inline-block"><div class="w-dyn-bind-empty"></div></a><div>•</div><div>March 18, 2025</div><div>•</div><div class="text-style-italic">20 min read</div></div></div></div><div role="listitem" class="library-blog_item w-dyn-item"><div class="library-blog_card"><a href="/data-engineering-resources/chunk-text-for-rag" class="library-blog_card-link w-inline-block"><div class="library-blog_small-title is-smaller">5 Chunking Strategies For RAG Applications</div></a><div class="library-blog_data-wrapper"><a href="#" class="library-blog_author-link w-inline-block"><div class="w-dyn-bind-empty"></div></a><div>•</div><div>March 18, 2025</div><div>•</div><div class="text-style-italic">20 min read</div></div></div></div><div role="listitem" class="library-blog_item w-dyn-item"><div class="library-blog_card"><a href="/data-engineering-resources/semantic-search-vs-vector-search" class="library-blog_card-link w-inline-block"><div class="library-blog_small-title is-smaller">Semantic Search vs Vector Search: Key Differences</div></a><div class="library-blog_data-wrapper"><a href="#" class="library-blog_author-link w-inline-block"><div class="w-dyn-bind-empty"></div></a><div>•</div><div>March 18, 2025</div><div>•</div><div class="text-style-italic">20 min read</div></div></div></div></div></div></div></div></div></div></div></div></div><div class="article_social-wrapper"><div fs-socialshare-element="facebook"><div class="article_social-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--bx" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><path d="M12.001 2.002c-5.522 0-9.999 4.477-9.999 9.999c0 4.99 3.656 9.126 8.437 9.879v-6.988h-2.54v-2.891h2.54V9.798c0-2.508 1.493-3.891 3.776-3.891c1.094 0 2.24.195 2.24.195v2.459h-1.264c-1.24 0-1.628.772-1.628 1.563v1.875h2.771l-.443 2.891h-2.328v6.988C18.344 21.129 22 16.992 22 12.001c0-5.522-4.477-9.999-9.999-9.999z" fill="currentColor"/></svg></div></div><div fs-socialshare-element="reddit"><div class="article_social-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--simple-icons" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><path fill="currentColor" d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12a12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547l-.8 3.747c1.824.07 3.48.632 4.674 1.488c.308-.309.73-.491 1.207-.491c.968 0 1.754.786 1.754 1.754c0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52c0 2.694-3.13 4.87-7.004 4.87c-3.874 0-7.004-2.176-7.004-4.87c0-.183.015-.366.043-.534A1.748 1.748 0 0 1 4.028 12c0-.968.786-1.754 1.754-1.754c.463 0 .898.196 1.207.49c1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 0 1 .14-.197a.35.35 0 0 1 .238-.042l2.906.617a1.214 1.214 0 0 1 1.108-.701zM9.25 12C8.561 12 8 12.562 8 13.25c0 .687.561 1.248 1.25 1.248c.687 0 1.248-.561 1.248-1.249c0-.688-.561-1.249-1.249-1.249zm5.5 0c-.687 0-1.248.561-1.248 1.25c0 .687.561 1.248 1.249 1.248c.688 0 1.249-.561 1.249-1.249c0-.687-.562-1.249-1.25-1.249zm-5.466 3.99a.327.327 0 0 0-.231.094a.33.33 0 0 0 0 .463c.842.842 2.484.913 2.961.913c.477 0 2.105-.056 2.961-.913a.361.361 0 0 0 .029-.463a.33.33 0 0 0-.464 0c-.547.533-1.684.73-2.512.73c-.828 0-1.979-.196-2.512-.73a.326.326 0 0 0-.232-.095z"/></svg></div></div><div fs-socialshare-element="twitter"><div class="article_social-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--bx" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><path d="M19.633 7.997c.013.175.013.349.013.523c0 5.325-4.053 11.461-11.46 11.461c-2.282 0-4.402-.661-6.186-1.809c.324.037.636.05.973.05a8.07 8.07 0 0 0 5.001-1.721a4.036 4.036 0 0 1-3.767-2.793c.249.037.499.062.761.062c.361 0 .724-.05 1.061-.137a4.027 4.027 0 0 1-3.23-3.953v-.05c.537.299 1.16.486 1.82.511a4.022 4.022 0 0 1-1.796-3.354c0-.748.199-1.434.548-2.032a11.457 11.457 0 0 0 8.306 4.215c-.062-.3-.1-.611-.1-.923a4.026 4.026 0 0 1 4.028-4.028c1.16 0 2.207.486 2.943 1.272a7.957 7.957 0 0 0 2.556-.973a4.02 4.02 0 0 1-1.771 2.22a8.073 8.073 0 0 0 2.319-.624a8.645 8.645 0 0 1-2.019 2.083z" fill="currentColor"/></svg></div></div><div fs-socialshare-element="linkedin"><div class="article_social-icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--bx" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><circle cx="4.983" cy="5.009" r="2.188" fill="currentColor"/><path d="M9.237 8.855v12.139h3.769v-6.003c0-1.584.298-3.118 2.262-3.118c1.937 0 1.961 1.811 1.961 3.218v5.904H21v-6.657c0-3.27-.704-5.783-4.526-5.783c-1.835 0-3.065 1.007-3.568 1.96h-.051v-1.66H9.237zm-6.142 0H6.87v12.139H3.095z" fill="currentColor"/></svg></div></div></div></section><div class="padding-medium"></div></main><footer class="footer_new"><div class="page-padding"><div class="container-large"><div class="padding-vertical padding-huge"><div class="footer_component"><div id="w-node-_28bd8468-15c2-d449-e595-44ee5e9d62dd-5e9d62d8" class="footer_row-wrapper is-left"><div class="footer_left-row-top"><div class="margin-bottom margin-medium"><a href="/" class="footer_logo-link w-inline-block"><img src="https://cdn.prod.website-files.com/605e01bc25f7e19a82e74788/6335a39da8c96ba75520b156_Logo.svg" loading="lazy" alt="grey logo" class="footer_logo"/></a></div><div class="margin-bottom margin-small"><div class="text-size-small">Airbyte is an open-source data integration engine that helps you consolidate your data in your data warehouses, lakes and databases.</div></div><div class="footer_social-wrapper"><a href="https://github.com/airbytehq/airbyte" target="_blank" class="footer_social-link w-inline-block"><img src="https://cdn.prod.website-files.com/605e01bc25f7e19a82e74788/6335a52fa702cd5cfff9de87_github.svg" loading="lazy" alt="github logo" class="footer_social-icon"/></a><a href="https://slack.airbyte.io/" target="_blank" class="footer_social-link w-inline-block"><img src="https://cdn.prod.website-files.com/605e01bc25f7e19a82e74788/6335a52f9169c5253529b81b_slack.svg" loading="lazy" alt="slack icon" class="footer_social-icon"/></a><a href="https://twitter.com/airbytehq" target="_blank" class="footer_social-link w-inline-block"><img src="https://cdn.prod.website-files.com/605e01bc25f7e19a82e74788/6335a5303665be71270effd5_twitter.svg" loading="lazy" alt="twitter icon" class="footer_social-icon"/></a><a href="https://www.linkedin.com/company/airbytehq/" target="_blank" class="footer_social-link w-inline-block"><img src="https://cdn.prod.website-files.com/605e01bc25f7e19a82e74788/6335a52f6929b61fc2422ebe_linkedin.svg" loading="lazy" alt="linkedin logo" class="footer_social-icon"/></a><a href="https://www.facebook.com/AirbyteHQ" target="_blank" class="footer_social-link w-inline-block"><img src="https://cdn.prod.website-files.com/605e01bc25f7e19a82e74788/6335a52f57b8649c3f942578_facebook.svg" loading="lazy" alt="facebook logo" class="footer_social-icon"/></a></div></div><div class="text-size-small">© <span fs-hacks-element="year">202X</span> <a href="#" class="link-9">Airbyte, Inc.</a></div></div><div id="w-node-_28bd8468-15c2-d449-e595-44ee5e9d62f4-5e9d62d8" class="footer_row-wrapper"><div class="footer_row-title">Product</div><div class="footer_links-wrapper"><a href="/solutions/why-airbyte" class="footer_link">Features</a><a href="/gated-demo" class="footer_link">Demo App</a><a href="/connectors" class="footer_link">Connectors</a><a href="/product/connector-development-kit" class="footer_link">Connector Builder and CDK</a><a href="/product/pyairbyte" class="footer_link">PyAirbyte</a><a href="/product/airbyte-open-source" class="footer_link">Airbyte Open Source</a><a href="/product/airbyte-cloud" class="footer_link">Airbyte Cloud</a><a href="/product/airbyte-enterprise" class="footer_link">Airbyte Self-Managed</a><a href="/product/features" class="footer_link">Compare Airbyte offers</a><a href="/pricing" class="footer_link">Pricing</a><a href="https://docs.airbyte.com/category/release-notes/" target="_blank" class="footer_link">Changelog</a><a href="https://go.airbyte.com/roadmap" target="_blank" class="footer_link">Roadmap</a><a href="/etl-tools" class="footer_link">Compare top ELT solutions</a><a href="/reviews" class="footer_link">Airbyte Reviews</a></div></div><div id="w-node-_28bd8468-15c2-d449-e595-44ee5e9d6308-5e9d62d8" class="footer_row-wrapper"><div class="footer_row-title">RESOURCES</div><div class="footer_links-wrapper"><a href="https://docs.airbyte.com/" target="_blank" class="footer_link">Documentation</a><a href="/blog" class="footer_link">Blog</a><a href="https://api.airbyte.com" class="footer_link">Airbyte API Docs</a><a href="https://registry.terraform.io/providers/airbytehq/airbyte/latest?_gl=1*1jqqx5d*_ga*NTU4MDM1NTI4LjE2ODMyMTc5MTk.*_ga_HDBMVFQGBH*MTY4ODMzMjYxOS41MTAuMC4xNjg4MzMyNjE5LjAuMC4w" class="footer_link">Terraform Provider Docs</a><a href="/community/community" class="footer_link">Community</a><a href="/data-engineering-resources" class="footer_link">Data Engineering Resources</a><a href="https://glossary.airbyte.com/" target="_blank" class="footer_link">Data Glossary</a><a href="/tutorials" class="footer_link">Tutorials</a><a href="https://airbyte.com/pyairbyte" target="_blank" class="footer_link">PyAirbyte Tutorials</a><a href="/resource-center" class="footer_link">Resource center</a><a href="/community/airbyte-community-call" class="footer_link">Community Call</a><a href="/top-etl-tools-for-sources" class="footer_link">Top ETL Tools</a><a href="/how-to-sync" class="footer_link">&quot;How to Sync&quot; Tutorials</a><a href="/connectors-directory" class="footer_link">Connectors Directory</a></div></div><div id="w-node-_28bd8468-15c2-d449-e595-44ee5e9d6320-5e9d62d8" class="footer_row-wrapper"><div class="footer_row-title">COMPANY</div><div class="footer_links-wrapper"><a href="/community/newsletter" class="footer_link">Newsletter</a><a href="https://handbook.airbyte.com/" target="_blank" class="footer_link">Company Handbook</a><a href="/company/about-us" class="footer_link">About Us</a><a href="/company/careers" class="footer_link">Careers</a><a href="/company/open-employee-referral-program" class="footer_link">Open employee referral program</a><a href="/company/startup-program" class="footer_link">Airbyte YC Startup Program</a><a href="/company/partners" class="footer_link">Partners</a><a href="/company/press" class="footer_link">Press</a><a href="/solutions/data-protection" class="footer_link">Data protection - Trust report</a><a href="/company/terms" class="footer_link">Terms of Service</a><a href="/company/privacy-policy" class="footer_link">Privacy Policy</a><a id="cookie-preferences-btn" href="#" class="footer_link">Cookie Preferences</a><a href="https://preferences.airbyte.com/dont_sell" target="_blank" class="footer_link">Do Not Sell/Share My Personal Information</a><a href="/company/talk-to-sales" class="footer_link">Contact Sales</a></div></div></div></div></div></div><div class="footer_security-wrapper"><img src="https://cdn.prod.website-files.com/605e01bc25f7e19a82e74788/63766f6a352a0030c3dacaf2_iso-27001.svg" loading="lazy" alt="" class="footer_security-icon"/><img src="https://cdn.prod.website-files.com/605e01bc25f7e19a82e74788/63766f8eadeb7276ae45079a_aicpa%20badge%20alt.svg" loading="lazy" alt="" class="footer_security-icon"/><img src="https://cdn.prod.website-files.com/605e01bc25f7e19a82e74788/636270dd2bda9b450ac852cd_gdpr%20badge.svg" loading="lazy" alt="gdpr badge" class="footer_security-icon"/><img src="https://cdn.prod.website-files.com/605e01bc25f7e19a82e74788/63cfef43867ebf615b0994b5_hipaa_icon%402x.png" loading="lazy" alt="hipaa logo" class="footer_security-icon"/></div><div class="popup-modal"><div class="popup-overlay"></div><div class="popup"><img src="https://cdn.prod.website-files.com/605e01bc25f7e19a82e74788/60ec2eb9446e3dfd408a23af_airbyte-community-without-background%202.png" loading="lazy" height="384" width="397" alt="" aria-hidder="true" class="octopus"/><div class="squares-holder"><img src="https://cdn.prod.website-files.com/605e01bc25f7e19a82e74788/60ec2965cfd091820f6cc74b_Frame%20338.svg" loading="lazy" width="524" height="146" alt="" aria-hidden="true" class="quares-bg-image"/></div><div class="logo-holder is-newsletter"><img src="https://cdn.prod.website-files.com/605e01bc25f7e19a82e74788/64b4adbb8883c0cbf936964f_Github.svg" loading="lazy" width="40" height="Auto" alt=""/><div class="popup-header text-weight-bold margin-bottom margin-0">GitHub</div></div><div class="popup-content is-github"><h2 class="popup-header">Follow the largest open-source data movement repo</h2><p class="popup-p">Hi there! Keep yourself up to date with our progress, our events, and the latest news on data &amp; AI engineering.</p></div><div class="btn-holder"><a href="https://github.com/airbytehq/airbyte" target="_blank" class="popup-button is-newsletter w-button">Star our GitHub repo</a><a href="/community/newsletter" class="popup-ghost-button-newsletter w-inline-block"><div>Join our newsletter</div><div class="text-size-xsmall text-weight-normal">(50k+ subscribers)</div></a></div></div></div></footer></div><script src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=605e01bc25f7e19a82e74788" type="text/javascript" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script><script src="https://cdn.prod.website-files.com/605e01bc25f7e19a82e74788/js/airbyte-dev.schunk.4a394eb5af8156f2.js" type="text/javascript"></script><script src="https://cdn.prod.website-files.com/605e01bc25f7e19a82e74788/js/airbyte-dev.schunk.928a462d71dd15f9.js" type="text/javascript"></script><script src="https://cdn.prod.website-files.com/605e01bc25f7e19a82e74788/js/airbyte-dev.7570848f.62312a693e8fe983.js" type="text/javascript"></script><!-- Right click nav logo for media kit -->
+<script>
+  const navLogo = document.querySelector(".logo-wrapper");
+  const contextMenu = document.querySelector(".menu-press-wrapper");
+  navLogo.addEventListener("contextmenu", function (e) {
+    e.preventDefault();
+    contextMenu.style.display = "flex";
+  });
+  document.body.addEventListener("click", function () {
+    contextMenu.style.display = "none";
+  });
+</script>
+
+<script>
+  var elt = document.getElementById("contact-us-pricing");
+  if (!!elt) {
+    elt.onclick=function(){
+      Intercom('show');
+    };
+  }
+</script>
+<script>
+  $('.popup-modal').hide()
+  function addEvent(obj, evt, fn) {
+    if (obj.addEventListener) {
+      obj.addEventListener(evt, fn, false);
+    } else if (obj.attachEvent) {
+      obj.attachEvent("on" + evt, fn);
+    }
+  }
+
+  function modalOnMouseOut() {
+    addEvent(document, 'mouseout', function(evt) {
+      if (evt.toElement == null && evt.relatedTarget == null && localStorage.getItem('exitIntent') !== 'true') {
+        $('.popup-modal').css('display', 'flex').fadeIn('fast');
+        localStorage.setItem('exitIntent', 'true');
+      };
+    });
+
+  }
+
+
+  // function to get the current scroll position (%)  
+  function getVerticalScrollPercentage(elm) {
+    var parent = elm.parentNode;
+    return (
+      ((elm.scrollTop || parent.scrollTop) /
+       (parent.scrollHeight - parent.clientHeight)) *
+      100
+    );
+  }  
+
+  //scroll event   
+  document.onscroll = function () {
+    var pos = getVerticalScrollPercentage(document.body);
+
+    if (pos > 50) {
+      //modal popup event on mouseout
+      modalOnMouseOut();
+    }
+  };  
+
+
+  $('.popup-ghost-button, .popup-overlay').click(function() {
+    $('.popup-modal').fadeOut('fast');
+  });
+</script>
+
+<!-- Place this tag in your head or just before your close body tag. -->
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+<!-- OptinMonster -->
+<script>(function(d){var s=d.createElement('script');s.type='text/javascript';s.src='https://a.omappapi.com/app/js/api.min.js';s.async=true;s.dataset.user='154290';s.dataset.account='168035';d.getElementsByTagName('head')[0].appendChild(s);})(document);</script>
+<!-- show Osano cookies preference drawer -->
+<script>
+  const cookieBtn= document.querySelector('#cookie-preferences-btn')
+  if(cookieBtn) {
+    cookieBtn.onclick = () => window.Osano?.cm.showDrawer("osano-cm-dom-info-dialog-open")
+  }
+</script>
+<!-- Common Room Website Tracking Setup Embed Code -->
+<script>
+  (function() {
+    if (typeof window === 'undefined') return;
+    if (typeof window.signals !== 'undefined') return;
+    var script = document.createElement('script');
+    script.src = 'https://cdn.cr-relay.com/v1/site/c7b0e5f6-4c33-4aa5-8a8f-6efde2871fbb/signals.js';
+    script.async = true;
+    window.signals = Object.assign(
+      [], 
+      ['page', 'identify', 'form'].reduce(function (acc, method){
+        acc[method] = function () {
+          signals.push([method, arguments]);
+          return signals;
+        };
+        return acc;
+      }, {})
+    );
+    document.head.appendChild(script);
+  })();
+</script>
+
+<!--Removing Conditionally Hidden Components -->
+<script>
+  $(document).ready(function(){
+    $('.w-condition-invisible').remove();
+  });
+</script>
+
+<!-- Start Current Year Custom Code -->
+<script>
+// when the DOM is ready
+  document.addEventListener('DOMContentLoaded', function() {
+  // set the fs-hack selector
+  const YEAR_SELECTOR = '[fs-hacks-element="year"]';
+  // get the text span element
+  const yearSpan = document.querySelector(YEAR_SELECTOR);
+
+  if (!yearSpan) return;
+  // get the current year
+  const currentYear = new Date().getFullYear();
+  // set the year span element's text to the current year  
+  yearSpan.innerText = currentYear.toString();
+});
+</script>
+<!-- End Current Year Custom Code --><!-- F’in sweet Webflow Hacks -->
+<script>
+// when the DOM is ready
+$(document).ready(function() {
+  // get the li items
+  const listItems = $('li');
+  // for each li item
+  listItems.each(function(index, item){
+    // check for '~' character
+    // it's recommended to start with the deepest level of sub bullet
+    // to ensure only the relevant classes are applied
+    
+    // if the li item text starts with '~~'
+    if($(item).text().startsWith('~~')){
+      // run indentText() function
+      indentText(this, 'hack20-sub-bullet-2');
+    }	// else if the li item starts with '~'
+    else if($(item).text().startsWith('~')){
+      // run indentText() function
+      indentText(this, 'hack20-sub-bullet');
+    }	
+  });
+ 
+  // indentText function
+  function indentText(li, className){
+    // add relevant className to li item
+    // if the li item text starts with '~~' add the sub-bullet-2 class
+    // else if the li item starts with '~' add the sub-bullet class
+    $(li).addClass(className);
+    // remove the '~' from the li items
+    // the regex /~+/g 
+    // matches any one or more ~ characters
+    const reformatedText = $(li).html().replace(/~+/g,'');
+    // replace the li item's html text that has ~ tags
+    // with the new text that removed the ~ character(s)
+    $(li).html(reformatedText);
+  }
+});
+</script>
+
+<!-- makes all rtf images fullwidth by default -->
+<script>	
+$(document).ready(function() {
+	$(".blog-rich-text figure.w-richtext-align-center").each(function(){
+		$(this).removeClass("w-richtext-align-center")
+       .addClass("w-richtext-align-fullwidth");
+	});
+});
+</script> 
+
+
+<script>
+const toggle = document.querySelector("#toggleTheme");
+const toggleTheme = (newTheme) => {
+  localStorage.setItem("theme", newTheme);
+  document.getElementById("content").className = newTheme;
+};
+
+toggle.addEventListener("change", function () {
+  toggleTheme(this.checked ? "dark-mode" : "light-mode");
+});
+
+const theme = localStorage.getItem("theme");
+
+const setThemeOnLoad = () => {
+  if (theme === "dark-mode") {
+    toggle.click()
+  }
+};
+setThemeOnLoad();
+</script>
+
+<script>
+// select the rich text field with class .blog-rich-text
+const richTextField = document.querySelector('.blog-rich-text');
+
+// select the section with id #toc
+const tocSection = document.querySelector('#toc');
+
+// check if h2 tag exists in rich text field
+const h2TagExists = richTextField.querySelector('h2');
+
+// if h2 tag does not exist, hide the toc section
+if (!h2TagExists) {
+  tocSection.style.display = 'none';
+}
+</script>
+
+<script>
+// Wait for the page to finish loading
+window.addEventListener('load', function() {
+
+  // Get all the links in the rich text field
+  const richTextFieldLinks = document.querySelectorAll('.blog-rich-text a');
+
+  // Loop through all the links and add the target="_blank" attribute
+  for (let i = 0; i < richTextFieldLinks.length; i++) {
+    richTextFieldLinks[i].setAttribute('target', '_blank');
+  }
+});
+</script><script src="https://hubspotonwebflow.com/assets/js/form-124.js" type="text/javascript" integrity="sha384-bjyNIOqAKScdeQ3THsDZLGagNN56B4X2Auu9YZIGu+tA/PlggMk4jbWruG/P6zYj" crossorigin="anonymous"></script></body></html>
